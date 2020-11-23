@@ -17,11 +17,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Auth::routes();
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 #Auth
 Route::get('auth/admin','App\Http\Controllers\AuthController@loginAdmin');
 Route::get('auth/pengurus','App\Http\Controllers\AuthController@loginEmployee');
-Route::get('auth/check-admin','App\Http\Controllers\AuthController@checkAdmin');
-Route::get('auth/check-employee','App\Http\Controllers\AuthController@checkEmployee');
+Route::post('auth/check-admin','App\Http\Controllers\AuthController@checkAdmin');
+Route::post('auth/check-employee','App\Http\Controllers\AuthController@checkEmployee');
 
 # Trash
 Route::get('trash','App\Http\Controllers\TrashController@index');

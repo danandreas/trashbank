@@ -80,9 +80,13 @@
                                 <a class="dropdown-item" href="page-user-profile.html"><i class="feather icon-user"></i>
                                     Edit Profile</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="auth-login.html"><i class="feather icon-power"></i>
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();"><i class="feather icon-power"></i>
                                     Logout</a>
                             </div>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </li>
                     </ul>
                 </div>

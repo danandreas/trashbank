@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-//use Illuminate\Foundation\Auth\AuthenticatesUsers;
-//use Auth;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    use AuthenticatesUsers;
+    //protected $redirectTo = RouteServiceProvider::HOME;
+
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
@@ -35,12 +38,26 @@ class AuthController extends Controller
     {
         $this->validate($request, [
             'email'   => 'required|email',
-            'password' => 'required|min:8'
+            'password' => 'required|min:3'
         ]);
 
         if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
 
-            return redirect()->intended('/auth-admin');
+            return redirect()->intended('/admin');
+        }
+        return back()->withInput($request->only('email', 'remember'));
+    }
+
+    public function checkEmployee(Request $request)
+    {
+        $this->validate($request, [
+            'email'   => 'required|email',
+            'password' => 'required|min:3'
+        ]);
+
+        if (Auth::guard('employee')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+
+            return redirect()->intended('/bank');
         }
         return back()->withInput($request->only('email', 'remember'));
     }

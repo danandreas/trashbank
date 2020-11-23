@@ -48,8 +48,8 @@ class Handler extends ExceptionHandler
             return redirect()->guest('/auth/admin');
         }
         if ($request->is('employee') || $request->is('employee/*')) {
-            return redirect()->guest('/auth/employee');
+            return redirect()->guest('/auth/pengurus');
         }
-        return redirect()->guest(route('auth'));
+        return redirect()->guest(route('login'));
     }
 }

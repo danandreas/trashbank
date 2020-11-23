@@ -68,6 +68,7 @@
                                         <div class="card-content">
                                             <div class="card-body pt-1">
                                                 <form method="POST" action="{{ $post_url }}">
+                                                    @csrf
                                                     <fieldset class="form-label-group form-group position-relative has-icon-left">
                                                         <input name="email" type="text" class="form-control" placeholder="Email" required>
                                                         <div class="form-control-position">

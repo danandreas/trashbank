@@ -7,6 +7,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 use Illuminate\Auth\AuthenticationException;
 use Auth;
+use Illuminate\Support\Facades\Session;
 
 class Handler extends ExceptionHandler
 {
@@ -44,12 +45,29 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
-        if ($request->is('admin') || $request->is('admin/*')) {
-            return redirect()->guest('/auth/admin');
+        $guard = $exception->guards()[0];
+        switch ($guard) {
+            case 'admin':
+                $login = 'auth.admin';
+                break;
+            default:
+                $login = 'auth.employee';
+                break;
         }
-        if ($request->is('employee') || $request->is('employee/*')) {
-            return redirect()->guest('/auth/pengurus');
-        }
-        return redirect()->guest(route('login'));
+        Session::forget('url.intented');
+        return redirect()->route($login);
+
+        // if ($request->expectsJson()) {
+        //     return response()->json(['error' => 'Unauthenticated.'], 401);
+        // }
+        // if ($request->is('admin') || $request->is('admin/*')) {
+        //     return redirect()->guest('/auth/admin');
+        // }
+        // if ($request->is('employee') || $request->is('employee/*')) {
+        //     return redirect()->guest('/auth/pengurus');
+        // }
+
+        // return response()->json(['error' => 'Unauthenticated.'], 401);
+        // return redirect()->guest(route('login'));
     }
 }

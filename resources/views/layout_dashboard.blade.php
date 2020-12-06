@@ -68,7 +68,13 @@
                         <li class="dropdown dropdown-user nav-item">
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
                                 <div class="user-nav d-sm-flex d-none">
-                                    <span class="user-name text-bold-600">JohnDoe</span>
+                                    <span class="user-name text-bold-600">
+                                    @if(Auth::guard('admin')->check())
+                                        {{Auth::guard('admin')->user()->name}}
+                                    @elseif(Auth::guard('employee')->check())
+                                        {{Auth::guard('employee')->user()->name}}
+                                    @endif
+                                    </span>
                                     <span class="user-status">Available</span>
                                 </div>
                                 <span>
@@ -80,11 +86,18 @@
                                 <a class="dropdown-item" href="page-user-profile.html"><i class="feather icon-user"></i>
                                     Edit Profile</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                @php
+                                    $route = null;
+                                    if(Auth::guard('admin')->check()){
+                                        $route = route('admin.logout');
+                                    }else { $route = route('employee.logout'); }
+                                @endphp
+
+                                <a class="dropdown-item" href="{{ $route }}" onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();"><i class="feather icon-power"></i>
                                     Logout</a>
                             </div>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            <form id="logout-form" action="{{ $route }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
                         </li>

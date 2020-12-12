@@ -95,7 +95,7 @@
                                                 <div class="divider-text"></div>
                                             </div>
                                             <div class="footer-btn d-inline">
-                                                <p>&copy; 2020 Bank Sampah</p>
+                                                <p>Copyright &copy; 2020 Bank Sampah</p>
                                             </div>
                                         </div>
                                     </div>

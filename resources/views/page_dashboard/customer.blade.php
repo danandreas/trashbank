@@ -18,7 +18,7 @@
                                 <div class="card-body card-dashboard">
                                     <p class="card-text"></p>
                                     <div>
-                                        <button type="button" class="btn btn-primary mr-1 mb-1 waves-effect waves-light" data-toggle="modal" data-target="#modal_form_input">+ {{ $title }}</button>
+                                        <button type="button" class="btn btn-primary mr-1 mb-1 waves-effect waves-light" data-toggle="modal" data-target="#modal_form_input">+ {{ $title }} </button>
                                     </div>
                                     <div class="table-responsive">
                                         <table id="datatable" class="table nowrap table-striped table-bordered complex-headers">
@@ -28,7 +28,8 @@
                                                     <th>Nama</th>
                                                     <th>Phone</th>
                                                     <th>Email</th>
-                                                    <th>Bank</th>
+                                                    <th>Tgl Registrasi</th>
+                                                    <th>Aktif</th>
                                                     <th width="100px">Pilihan</th>
                                                 </tr>
                                             </thead>
@@ -60,19 +61,6 @@
             <form id="form_input" enctype="multipart/form-data" novalidate>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Bank*</label>
-                        <div class="controls">
-                            <div class="form-group">
-                                <select id="bank_id" name="bank_id" class="select2 form-control" style="width:100%" required>
-                                    <option value="">Pilih Bank</option>
-                                    @foreach ($bank as $b)
-                                        <option value="{{ $b->id }}">{{ $b->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label>Nama*</label>
                         <div class="controls">
                             <input id="name" name="name" type="text" class="form-control" autocomplete="off" maxlength="225" required>
@@ -85,15 +73,21 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Email*</label>
+                        <label>Alamat*</label>
                         <div class="controls">
-                            <input id="email" name="email" type="text" class="form-control" autocomplete="off" maxlength="225" required>
+                            <textarea name="address" class="form-control"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Password*</label>
+                        <label>Email</label>
                         <div class="controls">
-                            <input id="password" name="password" type="password" class="form-control" autocomplete="off" maxlength="20" required>
+                            <input id="email" name="email" type="text" class="form-control" autocomplete="off" maxlength="225">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="controls">
+                            <input id="password" name="password" type="password" class="form-control" autocomplete="off" maxlength="20">
                         </div>
                     </div>
                     <div class="form-group">
@@ -148,9 +142,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Email*</label>
+                        <label>Email</label>
                         <div class="">
-                            <input id="edit_email" name="email" type="text" class="form-control" autocomplete="off" maxlength="225" required>
+                            <input id="edit_email" name="email" type="text" class="form-control" autocomplete="off" maxlength="225">
                         </div>
                     </div>
                     <div class="form-group">
@@ -186,17 +180,22 @@
         function loadData() {
             $.ajax({
                 type  : 'GET',
-                url   : "{{ url('/employee/data')}}",
+                url   : "{{ route('customer.data') }}",
                 success : function(row){
                     var html = '';
                     var i;
                     for(i=0; i<row.data.length; i++){
+                        var switchChecked = '';
+                        if(row.data[i].status == "1") {
+                            switchChecked = "checked";
+                        }
                         html += '<tr>'+
                                 '<td>'+(i+1)+'</td>'+
                                 '<td>'+row.data[i].name+'</td>'+
                                 '<td>'+row.data[i].phone+'</td>'+
                                 '<td>'+row.data[i].email+'</td>'+
-                                '<td>'+row.data[i].bank_name+'</td>'+
+                                '<td>'+row.data[i].created_at+'</td>'+
+                                '<td><div data-id="'+row.data[i].id+'" data-status="'+row.data[i].status+'" class="switch-button custom-control custom-switch custom-switch-success custom-control-inline"><input type="checkbox" name="" '+switchChecked+' class="custom-control-input"><label class="custom-control-label"></label></div></td>'+
                                 '<td align="center">'+
                                     '<button type="button" data-id="'+row.data[i].id+'" class="edit-button btn btn-icon btn-icon rounded-circle btn-primary btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-edit-1"></i></button>'
                                     +
@@ -212,7 +211,7 @@
         $('#form_input').on('submit', function() {
             $.ajax({
                 type: "POST",
-                url: "{{ url('/employee/store')}}",
+                url: "{{ route('customer.store') }}",
                 data: new FormData($('#form_input')[0]),
                 processData: false,
                 contentType: false,
@@ -245,7 +244,7 @@
             var id = $(this).data('id');
             $.ajax({
                 type: "POST",
-                url: "{{ url('/employee/edit') }}",
+                url: "{{ route('customer.edit') }}",
                 data: {
                     id: id
                 },
@@ -261,7 +260,7 @@
                     $('#form_edit').on('submit', function() {
                         $.ajax({
                             type: "POST",
-                            url: "{{ url('/employee/update') }}",
+                            url: "{{ route('customer.update') }}",
                             data: new FormData($('#form_edit')[0]),
                             processData: false,
                             contentType: false,
@@ -308,7 +307,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: "{{ url('/employee/delete') }}",
+                        url: "{{ route('customer.delete') }}",
                         method: "POST",
                         data: {
                             id: id
@@ -350,6 +349,48 @@
                     })
                 }
             })
+        });
+
+        //Status
+        $('#datatable').on('click', '.switch-button', function() {
+            var id = $(this).data('id');
+            var status = $(this).data('status');
+            if(status == "1"){
+                var change = "0";
+                var titleAlert = "Non aktif";
+                var typeAlert = "error";
+            } else {
+                var change = "1";
+                var titleAlert = "Aktif";
+                var typeAlert = "success";
+            }
+            $.ajax({
+                url: "{{ route('customer.status') }}",
+                method: "POST",
+                data: {
+                    id: id,
+                    status: change
+                },
+                success: function(data) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        onOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+                    Toast.fire({
+                        type: typeAlert,
+                        title: titleAlert
+                    })
+                    loadData();
+                }
+            });
+
         });
 
     });

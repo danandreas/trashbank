@@ -58,7 +58,7 @@ class AuthController extends Controller
 
         if (Auth::guard('employee')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
 
-            return redirect()->intended('/bank');
+            return redirect()->intended('/customer');
         }
         return back()->withInput($request->only('email', 'remember'));
     }

@@ -36,7 +36,7 @@ class RedirectIfAuthenticated
             return redirect('/admin');
         }
         if ($guard == "employee" && Auth::guard($guard)->check()) {
-            return redirect('/employee');
+            return redirect('/customer');
         }
         // if (Auth::guard($guard)->check()) {
         //     return redirect('/home');

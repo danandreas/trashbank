@@ -15,4 +15,8 @@ class Bank extends Model
     public function employee(){
     	return $this->hasMany('App\Models\Employee');
     }
+
+    public function customer(){
+    	return $this->hasMany('App\Models\Customer');
+    }
 }

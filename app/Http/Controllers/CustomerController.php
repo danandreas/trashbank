@@ -38,41 +38,50 @@ class CustomerController extends Controller
 
     protected function store(Request $request)
     {
-        # Get Bank ID from Employee Logged
-        if(Auth::guard('employee')->check()) {
-            $bank_id = Auth::guard('employee')->user()->bank_id;
+        $emailExist = Customer::where('email', $request['email'])->first();
+        if (!empty($request['email']) && $emailExist == TRUE){ // Jika email tidak kosong dan duplikat
+            return response()->json([
+                'code' => '302',
+                'data' => 'Email Duplicated',
+            ]);
         } else {
-            $bank_id = 0;
-        }
+            # Get Bank ID from Employee Logged
+            if(Auth::guard('employee')->check()) {
+                $bank_id = Auth::guard('employee')->user()->bank_id;
+            } else {
+                $bank_id = 0;
+            }
 
-        $record = [
-            'bank_id' => $bank_id,
-            'account_number' => rand(1000,9999),
-            'name' => $request['name'],
-            'phone' => $request['phone'],
-            'address' => $request['address'],
-            'saldo' => "0",
-            'status' => "1",
-        ];
+            $record = [
+                'bank_id' => $bank_id,
+                'account_number' => rand(1000,9999),
+                'name' => $request['name'],
+                'phone' => $request['phone'],
+                'address' => $request['address'],
+                'saldo' => "0",
+                'status' => "1",
+            ];
 
-        if (!empty($request['email'])) {
+            if (!empty($request['email'])) {
                 $record['email'] = $request['email'];
-        }
-        if (!empty($request['password'])) {
-                $record['password'] = Hash::make($request['password']);
-        }
-        $insert = Customer::create($record);
+            }
 
-        if ($insert == TRUE) {
-            return response()->json([
-                'code' => '200',
-                'data' => 'Create Success',
-            ]);
-        } else {
-            return response()->json([
-                'code' => '405',
-                'data' => 'Create Failed',
-            ]);
+            if (!empty($request['password'])) {
+                    $record['password'] = Hash::make($request['password']);
+            }
+            $insert = Customer::create($record);
+
+            if ($insert == TRUE) {
+                return response()->json([
+                    'code' => '200',
+                    'data' => 'Create Success',
+                ]);
+            } else {
+                return response()->json([
+                    'code' => '500',
+                    'data' => 'Create Failed',
+                ]);
+            }
         }
     }
 
@@ -89,31 +98,39 @@ class CustomerController extends Controller
 
     public function update(Request $request)
     {
-        if($request->has('id')){
-            $record = Customer::find($request->input('id'));
-            $record->update([
-                'bank_id' => $request['bank_id'],
-                'name' => $request['name'],
-                'phone' => $request['phone'],
-                'address' => $request['address'],
-                'email' => $request['email'],
+        $emailExist = Customer::where('email', $request['email'])->first();
+        if (!empty($request['email']) && $emailExist == TRUE){ // Jika email tidak kosong dan duplikat
+            return response()->json([
+                'code' => '302',
+                'data' => 'Email Duplicated',
             ]);
-
-            if (!empty($request['password'])) {
+        } else {
+            if($request->has('id')){
+                $record = Customer::find($request->input('id'));
                 $record->update([
-                    'password' => Hash::make($request['password'])
+                    'bank_id' => $request['bank_id'],
+                    'name' => $request['name'],
+                    'phone' => $request['phone'],
+                    'address' => $request['address'],
+                    'email' => $request['email'],
                 ]);
-            }
-            if ($record == TRUE) {
-                return response()->json([
-                    'code' => '200',
-                    'data' => 'Update Success',
-                ]);
-            } else {
-                return response()->json([
-                    'code' => '405',
-                    'data' => 'Update Failed',
-                ]);
+
+                if (!empty($request['password'])) {
+                    $record->update([
+                        'password' => Hash::make($request['password'])
+                    ]);
+                }
+                if ($record == TRUE) {
+                    return response()->json([
+                        'code' => '200',
+                        'data' => 'Update Success',
+                    ]);
+                } else {
+                    return response()->json([
+                        'code' => '405',
+                        'data' => 'Update Failed',
+                    ]);
+                }
             }
         }
     }

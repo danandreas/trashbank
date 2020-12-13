@@ -142,6 +142,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label>Alamat*</label>
+                        <div class="controls">
+                            <textarea id="edit_address" name="address" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label>Email</label>
                         <div class="">
                             <input id="edit_email" name="email" type="text" class="form-control" autocomplete="off" maxlength="225">
@@ -216,25 +222,33 @@
                 processData: false,
                 contentType: false,
                 dataType: "JSON",
-                success: function(data) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        onOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    })
-                    Toast.fire({
-                        type: 'success',
-                        title: 'Menambahkan {{ strtolower($title) }}'
-                    })
-                    $('#modal_form_input').modal('hide');
-                    $("#form_input")[0].reset();
-                    loadData();
+                success: function(row) {
+                    if (row.code == "302"){
+                        Swal.fire(
+                            'Gagal',
+                            'Email ini telah digunakan!',
+                            'error'
+                        );
+                    } else {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            onOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            type: 'success',
+                            title: 'Menambahkan {{ strtolower($title) }}'
+                        })
+                        $('#modal_form_input').modal('hide');
+                        $("#form_input")[0].reset();
+                        loadData();
+                    }
                 }
             })
             return false;
@@ -251,8 +265,9 @@
                 success: function(row) {
                     $('#modal_form_edit').modal('show');
                     $('#edit_id').val(row.data.id);
-                    $('#edit_phone').val(row.data.phone);
                     $('#edit_name').val(row.data.name);
+                    $('#edit_phone').val(row.data.phone);
+                    $('#edit_address').val(row.data.address);
                     $('#edit_email').val(row.data.email);
                     $('#edit_bank_id').val(row.data.bank_id).prop('selected', true).trigger('change');
 
@@ -265,25 +280,33 @@
                             processData: false,
                             contentType: false,
                             dataType: "JSON",
-                            success: function(data) {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top-end',
-                                    showConfirmButton: false,
-                                    timer: 3000,
-                                    timerProgressBar: true,
-                                    onOpen: (toast) => {
-                                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                    }
-                                })
-                                Toast.fire({
-                                    type: 'success',
-                                    title: 'Menyunting {{ strtolower($title) }}'
-                                })
-                                $('#modal_form_edit').modal('hide');
-                                $("#form_edit")[0].reset();
-                                loadData();
+                            success: function(row) {
+                                if (row.code == "302"){
+                                    Swal.fire(
+                                        'Gagal',
+                                        'Email ini telah digunakan!',
+                                        'error'
+                                    );
+                                } else {
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        onOpen: (toast) => {
+                                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                        }
+                                    })
+                                    Toast.fire({
+                                        type: 'success',
+                                        title: 'Menyunting {{ strtolower($title) }}'
+                                    })
+                                    $('#modal_form_edit').modal('hide');
+                                    $("#form_edit")[0].reset();
+                                    loadData();
+                                }
                             }
                         })
                         return false;

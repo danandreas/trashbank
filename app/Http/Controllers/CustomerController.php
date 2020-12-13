@@ -25,6 +25,7 @@ class CustomerController extends Controller
             $record[$i]['id'] = $d->id;
             $record[$i]['account_number'] = $d->account_number;
             $record[$i]['name'] = $d->name;
+            $record[$i]['gender'] = $d->gender;
             $record[$i]['phone'] = $d->phone;
             $record[$i]['address'] = $d->address;
             $record[$i]['email'] = $d->email;
@@ -63,6 +64,7 @@ class CustomerController extends Controller
                 'bank_id' => $bank_id,
                 'account_number' => $accountNumber,
                 'name' => $request['name'],
+                'gender' => $request['gender'],
                 'phone' => $request['phone'],
                 'address' => $request['address'],
                 'saldo' => "0",
@@ -117,6 +119,7 @@ class CustomerController extends Controller
                 $record = Customer::find($request->input('id'));
                 $record->update([
                     'name' => $request['name'],
+                    'gender' => $request['gender'],
                     'phone' => $request['phone'],
                     'address' => $request['address'],
                     'email' => $request['email'],

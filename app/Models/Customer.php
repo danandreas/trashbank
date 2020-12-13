@@ -17,6 +17,7 @@ class Customer extends Authenticatable
         'bank_id',
         'account_number',
         'name',
+        'gender',
         'phone',
         'address',
         'saldo',

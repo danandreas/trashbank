@@ -27,6 +27,7 @@
                                                     <th width="20px">No</th>
                                                     <th width="30px">No. Akun</th>
                                                     <th>Nama</th>
+                                                    <th width="10px">JK</th>
                                                     <th>Phone</th>
                                                     <th>Email</th>
                                                     <th>Alamat</th>
@@ -66,6 +67,19 @@
                         <label>Nama*</label>
                         <div class="controls">
                             <input id="name" name="name" type="text" class="form-control" autocomplete="off" maxlength="225" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Jenis Kelamin*</label>
+                        <div class="controls">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="gender" value="L" checked id="L">
+                                <label class="custom-control-label" for="L">Laki-laki</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="gender" value="P" id="P">
+                                <label class="custom-control-label" for="P">Perempuan</label>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -110,7 +124,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Input</h4>
+                <h4 class="modal-title">Edit</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -122,6 +136,19 @@
                         <label>Nama*</label>
                         <div class="">
                             <input id="edit_name" name="name" type="text" class="form-control" autocomplete="off" maxlength="225" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Jenis Kelamin*</label>
+                        <div class="controls">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="edit-radio custom-control-input" name="gender" value="L" id="EL">
+                                <label class="custom-control-label" for="EL">Laki-laki</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="edit-radio custom-control-input" name="gender" value="P" id="EP">
+                                <label class="custom-control-label" for="EP">Perempuan</label>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -184,6 +211,7 @@
                 },
                 { data: 'account_number' },
                 { data: 'name' },
+                { data: 'gender' },
                 { data: 'phone' },
                 { data: 'email' },
                 { data: 'address' },
@@ -259,6 +287,7 @@
                     $('#modal_form_edit').modal('show');
                     $('#edit_id').val(row.data.id);
                     $('#edit_name').val(row.data.name);
+                    $('input.edit-radio:radio[name="gender"]').filter('[value='+row.data.gender+']').prop('checked', true);
                     $('#edit_phone').val(row.data.phone);
                     $('#edit_address').val(row.data.address);
                     $('#edit_email').val(row.data.email);

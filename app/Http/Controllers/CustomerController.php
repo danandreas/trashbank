@@ -106,7 +106,8 @@ class CustomerController extends Controller
     public function update(Request $request)
     {
         $emailExist = Customer::where('email', $request['email'])->first();
-        if (!empty($request['email']) && $emailExist == TRUE){ // Jika email tidak kosong dan duplikat
+        $emailOwner = Customer::where('id', $request['id'])->first()->email;
+        if (!empty($request['email']) && $emailExist == TRUE && $emailOwner !== $request['email']){ // Jika email tidak kosong dan duplikat dan email ownernya
             return response()->json([
                 'code' => '302',
                 'data' => 'Email Duplicated',

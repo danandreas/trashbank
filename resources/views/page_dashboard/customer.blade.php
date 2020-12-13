@@ -25,11 +25,13 @@
                                             <thead>
                                                 <tr>
                                                     <th width="20px">No</th>
+                                                    <th width="30px">No. Akun</th>
                                                     <th>Nama</th>
                                                     <th>Phone</th>
                                                     <th>Email</th>
-                                                    <th>Tgl Registrasi</th>
-                                                    <th>Aktif</th>
+                                                    <th>Alamat</th>
+                                                    <th width="40px">Tgl Registrasi</th>
+                                                    <th width="20px">Aktif</th>
                                                     <th width="100px">Pilihan</th>
                                                 </tr>
                                             </thead>
@@ -117,19 +119,6 @@
                 <div class="modal-body">
                     <input id="edit_id" name="id" type="hidden" novalidate>
                     <div class="form-group">
-                        <label>Bank*</label>
-                        <div class="controls">
-                            <div class="form-group">
-                                <select id="edit_bank_id" name="bank_id" class="select2 form-control" style="width:100%" required>
-                                    <option value="">Pilih Bank</option>
-                                    @foreach ($bank as $b)
-                                        <option value="{{ $b->id }}">{{ $b->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label>Nama*</label>
                         <div class="">
                             <input id="edit_name" name="name" type="text" class="form-control" autocomplete="off" maxlength="225" required>
@@ -179,40 +168,44 @@
             headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')}
         });
 
-        $('#datatable').dataTable();
-
         // read
-        loadData();
-        function loadData() {
-            $.ajax({
-                type  : 'GET',
-                url   : "{{ route('customer.data') }}",
-                success : function(row){
-                    var html = '';
-                    var i;
-                    for(i=0; i<row.data.length; i++){
-                        var switchChecked = '';
-                        if(row.data[i].status == "1") {
+        $('#datatable').dataTable({
+            processing: true,
+            stateSave: true,
+            ajax:{
+                url: '{{ route("customer.data") }}',
+                dataSrc: 'data'
+            },
+            columns: [
+                { data: null,'sortable': true,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                { data: 'account_number' },
+                { data: 'name' },
+                { data: 'phone' },
+                { data: 'email' },
+                { data: 'address' },
+                { data: 'created_at' },
+                { data: null, 'sortable': false,
+                    render: function ( data, type, row ) {
+                        var switchChecked = "";
+                        if(data.status == "1") {
                             switchChecked = "checked";
                         }
-                        html += '<tr>'+
-                                '<td>'+(i+1)+'</td>'+
-                                '<td>'+row.data[i].name+'</td>'+
-                                '<td>'+row.data[i].phone+'</td>'+
-                                '<td>'+row.data[i].email+'</td>'+
-                                '<td>'+row.data[i].created_at+'</td>'+
-                                '<td><div data-id="'+row.data[i].id+'" data-status="'+row.data[i].status+'" class="switch-button custom-control custom-switch custom-switch-success custom-control-inline"><input type="checkbox" name="" '+switchChecked+' class="custom-control-input"><label class="custom-control-label"></label></div></td>'+
-                                '<td align="center">'+
-                                    '<button type="button" data-id="'+row.data[i].id+'" class="edit-button btn btn-icon btn-icon rounded-circle btn-primary btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-edit-1"></i></button>'
-                                    +
-                                    '<button type="button" data-id="'+row.data[i].id+'" class="delete-button btn btn-icon btn-icon rounded-circle btn-danger btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-trash"></i></button>'
-                                +'</td>'+
-                                '</tr>';
+                        return '<div data-id="'+data.id+'" data-status="'+data.status+'" class="switch-button custom-control custom-switch custom-switch-success custom-control-inline"><input type="checkbox" name="" '+switchChecked+' class="custom-control-input"><label class="custom-control-label"></label></div>';
                     }
-                    $('#record').html(html);
+                },
+                { data: null, 'sortable': false,
+                    render: function ( data, type, row ) {
+                        return '<button type="button" data-id="'+data.id+'" class="edit-button btn btn-icon btn-icon rounded-circle btn-primary btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-edit-1"></i></button>'+
+                        '<button type="button" data-id="'+data.id+'" class="delete-button btn btn-icon btn-icon rounded-circle btn-danger btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-trash"></i></button>';
+                    }
                 }
-            });
-        }
+            ]
+        });
+
         // create
         $('#form_input').on('submit', function() {
             $.ajax({
@@ -230,6 +223,7 @@
                             'error'
                         );
                     } else {
+                        $('#datatable').DataTable().ajax.reload();
                         const Toast = Swal.mixin({
                             toast: true,
                             position: 'top-end',
@@ -247,7 +241,6 @@
                         })
                         $('#modal_form_input').modal('hide');
                         $("#form_input")[0].reset();
-                        loadData();
                     }
                 }
             })
@@ -269,7 +262,7 @@
                     $('#edit_phone').val(row.data.phone);
                     $('#edit_address').val(row.data.address);
                     $('#edit_email').val(row.data.email);
-                    $('#edit_bank_id').val(row.data.bank_id).prop('selected', true).trigger('change');
+                    //$('#edit_bank_id').val(row.data.bank_id).prop('selected', true).trigger('change');
 
                     $('#form_edit').off('submit');
                     $('#form_edit').on('submit', function() {
@@ -288,6 +281,7 @@
                                         'error'
                                     );
                                 } else {
+                                    $('#datatable').DataTable().ajax.reload();
                                     const Toast = Swal.mixin({
                                         toast: true,
                                         position: 'top-end',
@@ -305,7 +299,6 @@
                                     })
                                     $('#modal_form_edit').modal('hide');
                                     $("#form_edit")[0].reset();
-                                    loadData();
                                 }
                             }
                         })
@@ -336,6 +329,7 @@
                             id: id
                         },
                         success: function(data) {
+                            $('#datatable').DataTable().ajax.reload();
                             const Toast = Swal.mixin({
                                 toast: true,
                                 position: 'top-end',
@@ -351,7 +345,6 @@
                                 type: 'success',
                                 title: 'Menghapus {{ strtolower($title) }}'
                             })
-                            loadData();
                         }
                     })
                 } else if (result.dismiss === swal.DismissReason.cancel) {
@@ -395,6 +388,7 @@
                     status: change
                 },
                 success: function(data) {
+                    $('#datatable').DataTable().ajax.reload();
                     const Toast = Swal.mixin({
                         toast: true,
                         position: 'top-end',
@@ -410,7 +404,6 @@
                         type: typeAlert,
                         title: titleAlert
                     })
-                    loadData();
                 }
             });
 

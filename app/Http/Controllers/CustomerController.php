@@ -12,7 +12,7 @@ class CustomerController extends Controller
     public function index()
     {
         $data['title'] = "Nasabah";
-        $data['bank'] = Bank::orderBy('id', 'desc')->get();
+        $data['bank'] = Bank::orderBy('name', 'asc')->get();
         return view('page_dashboard.customer', $data);
     }
 
@@ -23,8 +23,10 @@ class CustomerController extends Controller
         foreach($query as $i => $d){
             $record[$i] = [];
             $record[$i]['id'] = $d->id;
+            $record[$i]['account_number'] = $d->account_number;
             $record[$i]['name'] = $d->name;
             $record[$i]['phone'] = $d->phone;
+            $record[$i]['address'] = $d->address;
             $record[$i]['email'] = $d->email;
             $record[$i]['bank_name'] = $d->bank->name;
             $record[$i]['status'] = $d->status;
@@ -52,9 +54,14 @@ class CustomerController extends Controller
                 $bank_id = 0;
             }
 
+            # Generate Account Number"
+            $bankCode = Bank::where('id',$bank_id)->first()->code;
+            $maxCustomerId = Customer::where('bank_id',$bank_id)->max('id');
+            $accountNumber = $bankCode . sprintf("%03d", $maxCustomerId + 1);
+
             $record = [
                 'bank_id' => $bank_id,
-                'account_number' => rand(1000,9999),
+                'account_number' => $accountNumber,
                 'name' => $request['name'],
                 'phone' => $request['phone'],
                 'address' => $request['address'],
@@ -108,7 +115,6 @@ class CustomerController extends Controller
             if($request->has('id')){
                 $record = Customer::find($request->input('id'));
                 $record->update([
-                    'bank_id' => $request['bank_id'],
                     'name' => $request['name'],
                     'phone' => $request['phone'],
                     'address' => $request['address'],

@@ -29,4 +29,8 @@ class Saving extends Authenticatable
     public function trash(){
     	return $this->belongsTo(Trash::class);
     }
+
+    public function customer(){
+    	return $this->belongsTo(Customer::class);
+    }
 }

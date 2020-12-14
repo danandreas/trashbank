@@ -70,9 +70,13 @@
                             if(Auth::guard('admin')->check()) {
                                 $name = Auth::guard('admin')->user()->name;
                                 $level = "Admin";
+                                $email = Auth::guard('admin')->user()->email;
+                                $bank = Auth::guard('admin')->user()->bank->name;
                             } elseif(Auth::guard('employee')->check()) {
                                 $name = Auth::guard('employee')->user()->name;
                                 $level = "Pengurus";
+                                $email = Auth::guard('employee')->user()->email;
+                                $bank = Auth::guard('employee')->user()->bank->name;
                             }
                             @endphp
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
@@ -86,8 +90,8 @@
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="page-user-profile.html"><i class="feather icon-user"></i>
-                                    Edit Profile</a>
+                                <a class="dropdown-item" href=""><i class="feather icon-map-pin"></i>{{ $bank ?? "" }}</a>
+                                <a class="dropdown-item" href=""><i class="feather icon-mail"></i>{{ $email ?? "" }}</a>
                                 <div class="dropdown-divider"></div>
                                 @php
                                     $route = null;

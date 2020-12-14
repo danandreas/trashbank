@@ -29,4 +29,8 @@ class Customer extends Authenticatable
     public function bank(){
     	return $this->belongsTo(Bank::class);
     }
+
+    public function customer(){
+    	return $this->hasMany(Customer::class);
+    }
 }

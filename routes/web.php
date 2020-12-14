@@ -6,6 +6,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TrashController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\SavingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -101,10 +102,10 @@ Route::group(['prefix' => 'bank', 'middleware' => ['auth:admin'], 'except'=>['ad
 
 # Saving
 Route::group(['prefix' => 'saving', 'middleware' => ['auth:employee'], 'except'=>['employee.logout']], function(){
-    Route::get('/',[CustomerController::class,'index'])->name('saving.index');
-    Route::get('data',[CustomerController::class,'data'])->name('saving.data');
-    Route::post('store',[CustomerController::class,'store'])->name('saving.store');
-    Route::post('edit',[CustomerController::class,'edit'])->name('saving.edit');
-    Route::post('update',[CustomerController::class,'update'])->name('saving.update');
-    Route::post('delete',[CustomerController::class,'delete'])->name('saving.delete');
+    Route::get('/',[SavingController::class,'index'])->name('saving.index');
+    Route::get('data',[SavingController::class,'data'])->name('saving.data');
+    Route::post('store',[SavingController::class,'store'])->name('saving.store');
+    Route::post('edit',[SavingController::class,'edit'])->name('saving.edit');
+    Route::post('update',[SavingController::class,'update'])->name('saving.update');
+    Route::post('delete',[SavingController::class,'delete'])->name('saving.delete');
 });

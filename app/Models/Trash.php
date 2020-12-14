@@ -8,8 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Trash extends Model
 {
     use HasFactory;
-    protected $guard = 'trashes';
     protected $table = 'trashes';
     protected $fillable = ['name'];
     //public $timestamps = false;
+
+    public function savings(){
+    	return $this->hasMany(Saving::class);
+    }
 }

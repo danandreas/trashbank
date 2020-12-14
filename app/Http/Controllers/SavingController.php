@@ -1,23 +1,24 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Saving;
 use App\Models\Employee;
-use App\Models\Bank;
+use App\Models\Trash;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
-class EmployeeController extends Controller
+class SavingController extends Controller
 {
     public function index()
     {
-        $data['title'] = "Pegurus Bank";
-        $data['bank'] = Bank::orderBy('name', 'asc')->get();
-        return view('page_dashboard.employee', $data);
+        $data['title'] = "Tabungan";
+        $data['bank'] = Trash::orderBy('name', 'asc')->get();
+        return view('page_dashboard.saving', $data);
     }
 
     public function data()
     {
-        $query = Employee::orderBy('id', 'desc')->get();
+        $query = Saving::orderBy('id', 'desc')->get();
         $record = [];
         foreach($query as $i => $d){
             $record[$i] = [];
@@ -35,14 +36,23 @@ class EmployeeController extends Controller
 
     protected function store(Request $request)
     {
-        $record = Employee::create([
-            'bank_id' => $request['bank_id'],
-            'name' => $request['name'],
-            'phone' => $request['phone'],
-            'email' => $request['email'],
-            'password' => Hash::make($request['password']),
-        ]);
-        if ($record == TRUE) {
+        if(Auth::guard('employee')->check()) {
+            $bank_id = Auth::guard('employee')->user()->bank_id;
+        } else {
+            $bank_id = 0;
+        }
+
+        $record = [
+            'customer_id' => $request['customer_id'],
+            'bank_id' => $bank_id,
+            'trash_id' => $request['trash_id'],
+            'weight' => $request['weight'],
+            'description' => $request['description'],
+            'transaction_status' => "0",
+        ];
+        $insert = Saving::create($record);
+
+        if ($insert == TRUE) {
             return response()->json([
                 'code' => '200',
                 'data' => 'Create Success',
@@ -58,7 +68,7 @@ class EmployeeController extends Controller
     public function edit(Request $request)
     {
         if($request->has('id')){
-            $record = Employee::find($request->input('id'));
+            $record = Saving::find($request->input('id'));
             return response()->json([
                 'code' => '200',
                 'data' => $record,
@@ -69,19 +79,12 @@ class EmployeeController extends Controller
     public function update(Request $request)
     {
         if($request->has('id')){
-            $record = Employee::find($request->input('id'));
+            $record = Saving::find($request->input('id'));
             $record->update([
-                'bank_id' => $request['bank_id'],
-                'name' => $request['name'],
-                'phone' => $request['phone'],
-                'email' => $request['email']
+                'trash_id' => $request['trash_id'],
+                'weight' => $request['weight'],
+                'description' => $request['description'],
             ]);
-
-            if (!empty($request['password'])) {
-                $record->update([
-                    'password' => Hash::make($request['password'])
-                ]);
-            }
             if ($record == TRUE) {
                 return response()->json([
                     'code' => '200',
@@ -99,7 +102,7 @@ class EmployeeController extends Controller
     public function delete(Request $request)
     {
         if($request->has('id')){
-            $record = Employee::where('id',$request->input('id'));
+            $record = Saving::where('id',$request->input('id'));
             $record->delete();
             return response()->json([
                 'code' => '200',

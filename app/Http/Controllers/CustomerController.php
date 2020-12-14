@@ -12,7 +12,7 @@ class CustomerController extends Controller
     public function index()
     {
         $data['title'] = "Nasabah";
-        $data['bank'] = Bank::orderBy('name', 'asc')->get();
+        //$data['bank'] = Bank::orderBy('name', 'asc')->get();
         return view('page_dashboard.customer', $data);
     }
 

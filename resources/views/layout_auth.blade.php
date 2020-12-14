@@ -54,10 +54,10 @@
                     <div class="col-xl-8 col-11 d-flex justify-content-center">
                         <div class="card bg-authentication rounded-0 mb-0">
                             <div class="row m-0">
-                                <div class="col-lg-6 d-lg-block d-none text-center align-self-center px-1 py-0">
+                                <div class="col-lg-6 d-lg-block text-center align-self-center px-1 py-0">
                                     <img src="{{ asset('/images/pages/login.png') }}" alt="branding logo">
                                 </div>
-                                <div class="col-lg-6 col-12 p-0">
+                                <div class="col-lg-6 col-12 p-0 ustify-content-center">
                                     <div class="card rounded-0 mb-0 px-2">
                                         <div class="card-header pb-1">
                                             <div class="card-title">
@@ -84,7 +84,7 @@
                                                         </div>
                                                         <label for="user-password">Password</label>
                                                     </fieldset>
-                                                    <div class="text-center">
+                                                    <div class="justify-content-center">
                                                         <button type="submit" class="btn btn-primary float-left btn-inline">Login</button>
                                                     </div>
                                                 </form>
@@ -95,7 +95,7 @@
                                                 <div class="divider-text"></div>
                                             </div>
                                             <div class="footer-btn d-inline">
-                                                <p>Copyright &copy; 2020 Bank Sampah</p>
+                                                <p>Copyright &copy; 2020 Bank Sampah. PT.TIV</p>
                                             </div>
                                         </div>
                                     </div>

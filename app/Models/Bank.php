@@ -13,10 +13,14 @@ class Bank extends Model
     protected $fillable = ['code','name','phone','address'];
 
     public function employee(){
-    	return $this->hasMany('App\Models\Employee');
+    	return $this->hasMany(Employee::class);
     }
 
     public function customer(){
-    	return $this->hasMany('App\Models\Customer');
+    	return $this->hasMany(Customer::class);
+    }
+
+    public function savings(){
+    	return $this->hasMany(Saving::class);
     }
 }

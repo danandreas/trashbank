@@ -32,6 +32,6 @@ class Employee extends Authenticatable
     ];
 
     public function bank(){
-    	return $this->belongsTo('App\Models\bank');
+    	return $this->belongsTo(Bank::class);
     }
 }

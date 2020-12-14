@@ -22,7 +22,11 @@ class Saving extends Authenticatable
         'transaction_status',
     ];
 
-    // public function bank(){
-    // 	return $this->belongsTo('App\Models\bank');
-    // }
+    public function bank(){
+    	return $this->belongsTo(Bank::class);
+    }
+
+    public function trash(){
+    	return $this->belongsTo(Trash::class);
+    }
 }

@@ -99,3 +99,12 @@ Route::group(['prefix' => 'bank', 'middleware' => ['auth:admin'], 'except'=>['ad
     Route::post('delete',[BankController::class,'delete'])->name('bank.delete');
 });
 
+# Saving
+Route::group(['prefix' => 'saving', 'middleware' => ['auth:employee'], 'except'=>['employee.logout']], function(){
+    Route::get('/',[CustomerController::class,'index'])->name('saving.index');
+    Route::get('data',[CustomerController::class,'data'])->name('saving.data');
+    Route::post('store',[CustomerController::class,'store'])->name('saving.store');
+    Route::post('edit',[CustomerController::class,'edit'])->name('saving.edit');
+    Route::post('update',[CustomerController::class,'update'])->name('saving.update');
+    Route::post('delete',[CustomerController::class,'delete'])->name('saving.delete');
+});

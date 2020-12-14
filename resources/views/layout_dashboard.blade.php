@@ -153,7 +153,7 @@
                     <a href="{{ route('customer.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Nasabah">Nasabah</span></a>
                 </li>
                 <li class=" nav-item">
-                    <a href="{{ route('admin.index') }}"><i class="feather icon-layers"></i><span class="menu-title" data-i18n="Tabungan">Tabungan</span></a>
+                    <a href="{{ route('saving.index') }}"><i class="feather icon-layers"></i><span class="menu-title" data-i18n="Tabungan">Tabungan</span></a>
                 </li>
                 {{-- <li class=" nav-item"><a href="#"><i class="feather icon-shopping-cart"></i><span class="menu-title"
                             data-i18n="Ecommerce">Ecommerce</span></a>

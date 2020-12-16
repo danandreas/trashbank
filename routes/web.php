@@ -7,6 +7,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TrashController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\SavingController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -111,3 +112,13 @@ Route::group(['prefix' => 'saving', 'middleware' => ['auth:employee'], 'except'=
 });
 
 Route::get('fcm','App\Http\Controllers\FcmController@index');
+
+# Message
+Route::group(['prefix' => 'message', 'middleware' => ['auth:employee'], 'except'=>['employee.logout']], function(){
+    Route::get('/',[MessageController::class,'index'])->name('message.index');
+    Route::get('data',[MessageController::class,'data'])->name('message.data');
+    Route::post('store',[MessageController::class,'store'])->name('message.store');
+    Route::post('detail',[MessageController::class,'detail'])->name('message.detail');
+    Route::post('update',[MessageController::class,'update'])->name('message.update');
+    Route::post('delete',[MessageController::class,'delete'])->name('message.delete');
+});

@@ -29,7 +29,8 @@
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('/css/core/menu/menu-types/vertical-menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('/css/core/colors/palette-gradient.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('/css/plugins/forms/validation/form-validation.css') }}">
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('/css/plugins/forms/validation/form-validation.css') }}"> --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('/css/pages/app-chat.css') }}">
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
@@ -41,8 +42,8 @@
 
 <!-- BEGIN: Body-->
 
-<body class="vertical-layout vertical-menu-modern 2-columns  navbar-floating footer-static   menu-collapsed"
-    data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
+<body class="vertical-layout vertical-menu-modern 2-columns chat-application navbar-floating footer-static menu-collapsed"
+    data-open="click" data-menu="vertical-menu-modern" data-col="content-left-sidebar">
 
     <!-- BEGIN: Header-->
     <nav class="header-navbar navbar-expand-lg navbar navbar-with-menu floating-nav navbar-light navbar-shadow">
@@ -159,6 +160,9 @@
                 <li class=" nav-item">
                     <a href="{{ route('saving.index') }}"><i class="feather icon-layers"></i><span class="menu-title" data-i18n="Tabungan">Tabungan</span></a>
                 </li>
+                <li class=" nav-item">
+                    <a href="{{ route('message.index') }}"><i class="feather icon-mail"></i><span class="menu-title" data-i18n="Pesan">Pesan</span></a>
+                </li>
                 {{-- <li class=" nav-item"><a href="#"><i class="feather icon-shopping-cart"></i><span class="menu-title"
                             data-i18n="Ecommerce">Ecommerce</span></a>
                     <ul class="menu-content">
@@ -220,11 +224,12 @@
     <script src="{{ asset('/js/core/app-menu.js') }}"></script>
     <script src="{{ asset('/js/core/app.js') }}"></script>
     <script src="{{ asset('/js/scripts/components.js') }}"></script>
+    <script src="{{ asset('/js/scripts/pages/app-chat.js') }}"></script>
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
     <script src="{{ asset('/js/scripts/extensions/sweet-alerts.js') }}"></script>
-    <script src="{{ asset('/js/scripts/forms/validation/form-validation.js') }}"></script>
+    {{-- <script src="{{ asset('/js/scripts/forms/validation/form-validation.js') }}"></script> --}}
     <!-- END: Page JS-->
     <script>
         $(document).ready(function() {

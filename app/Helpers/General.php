@@ -4,6 +4,14 @@ function myDate($date){
     return \Carbon\Carbon::parse($date)->format("Y-m-d");
 }
 
+function myDateTime($date){
+    return \Carbon\Carbon::parse($date)->format("Y/m/d G:i");
+}
+
+function myTime($date){
+    return \Carbon\Carbon::parse($date)->format("G:i");
+}
+
 function myImagePath($image_name)
 {
     return public_path('folder_kamu/sub_folder_kamu/'.$image_name);

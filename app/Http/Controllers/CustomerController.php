@@ -18,7 +18,14 @@ class CustomerController extends Controller
 
     public function data()
     {
-        $query = Customer::orderBy('id', 'desc')->get();
+        # Get Bank ID from Employee Logged
+        if(Auth::guard('employee')->check()) {
+            $bank_id = Auth::guard('employee')->user()->bank_id;
+        } else {
+            $bank_id = 0;
+        }
+
+        $query = Customer::where('bank_id',$bank_id)->orderBy('id', 'desc')->get();
         $record = [];
         foreach($query as $i => $d){
             $record[$i] = [];

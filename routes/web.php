@@ -109,3 +109,5 @@ Route::group(['prefix' => 'saving', 'middleware' => ['auth:employee'], 'except'=
     Route::post('update',[SavingController::class,'update'])->name('saving.update');
     Route::post('delete',[SavingController::class,'delete'])->name('saving.delete');
 });
+
+Route::get('fcm','App\Http\Controllers\FcmController@index');

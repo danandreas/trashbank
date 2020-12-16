@@ -26,6 +26,7 @@
                                                 <tr>
                                                     <th width="20px">No</th>
                                                     <th width="40px">Tanggal</th>
+                                                    <th width="40px">No. Akun</th>
                                                     <th>Nasabah</th>
                                                     <th>Jenis Sampah</th>
                                                     <th width="30px">Berat</th>
@@ -197,9 +198,14 @@
                     }
                 },
                 { data: 'created_at' },
+                { data: 'account_number' },
                 { data: 'customer_name' },
                 { data: 'trash_name' },
-                { data: 'weight' },
+                { data: null, 'sortable': true,
+                    render: function ( data, type, row ) {
+                        return '<b> '+data.weight+' </b>';
+                    }
+                },
                 { data: 'description' },
                 { data: null, 'sortable': false,
                     render: function ( data, type, row ) {

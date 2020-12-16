@@ -25,12 +25,20 @@ class SavingController extends Controller
 
     public function data()
     {
-        $query = Saving::orderBy('id', 'desc')->get();
+        # Get Bank ID from Employee Logged
+        if(Auth::guard('employee')->check()) {
+            $bank_id = Auth::guard('employee')->user()->bank_id;
+        } else {
+            $bank_id = 0;
+        }
+
+        $query = Saving::where('bank_id',$bank_id)->orderBy('id', 'desc')->get();
         $record = [];
         foreach($query as $i => $d){
             $record[$i] = [];
             $record[$i]['id'] = $d->id;
             $record[$i]['created_at'] = myDate($d->created_at);
+            $record[$i]['account_number'] = $d->customer->account_number;
             $record[$i]['customer_name'] = $d->customer->name;
             $record[$i]['bank_name'] = $d->bank->name;
             $record[$i]['trash_name'] = $d->trash->name;

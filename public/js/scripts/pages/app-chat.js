@@ -74,14 +74,14 @@
     }
     $(this).addClass("active");
     $(this).find(".badge").remove();
-    if($('.chat-user-list ul li').hasClass('active')){
-      $('.start-chat-area').addClass('d-none');
-      $('.active-chat').removeClass('d-none');
-    }
-    else{
-      $('.start-chat-area').removeClass('d-none');
-      $('.active-chat').addClass('d-none');
-    }
+    // if($('.chat-user-list ul li').hasClass('active')){
+    //   $('.start-chat-area').addClass('d-none');
+    //   $('.active-chat').removeClass('d-none');
+    // }
+    // else{
+    //   $('.start-chat-area').removeClass('d-none');
+    //   $('.active-chat').addClass('d-none');
+    // }
   });
 
   // autoscroll to bottom of Chat area

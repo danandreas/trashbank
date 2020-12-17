@@ -9,7 +9,7 @@ class Message extends Model
 {
     use HasFactory;
     protected $table = 'messages';
-    protected $fillable = ['bank_id','customer_id','message'];
+    protected $fillable = ['bank_id','customer_id','sender','message'];
 
     public function bank(){
     	return $this->belongsTo(Bank::class);

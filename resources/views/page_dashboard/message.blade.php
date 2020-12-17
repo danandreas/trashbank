@@ -50,10 +50,44 @@
                             <span class="mb-1 start-chat-icon feather icon-message-square"></span>
                             <h4 class="py-50 px-1 sidebar-toggle start-chat-text">Start Conversation</h4>
                         </div>
-                        <div class="active-chat d-none" id="detailMessage">
+                        <div class="active-chat d-none">
+                            <div class="chat_navbar">
+                                <header class="chat_header d-flex justify-content-between align-items-center p-1">
+                                    <div class="vs-con-items d-flex align-items-center">
+                                        <div class="sidebar-toggle d-block d-lg-none mr-1"><i class="feather icon-menu font-large-1"></i></div>
+                                        <div class="avatar user-profile-toggle m-0 m-0 mr-1">
+                                            <img src="{{ asset("") }}images/portrait/small/avatar-s-1.jpg" alt="" height="40" width="40" />
+                                            <span class="avatar-status-busy"></span>
+                                        </div>
+                                        <h6 class="mb-0" id="customerNameMessage"></h6>
+                                    </div>
+                                    <span class="favorite"><i class="feather icon-star font-medium-5"></i></span>
+                                </header>
+                            </div>
+                            <div class="user-chats">
+                                <div class="chats this-is-message" id="messageContent">
+                                    {{-- <div class="chat chat-left">
+                                        <div class="chat-body">
+                                            <div class="chat-content">
+                                                <p>Hey John, I am looking for the best admin template.</p>
+                                                <p>Could you please help me to find it out?</p>
+                                            </div>
+                                            <div class="chat-content">
+                                                <p>It should be Bootstrap 4 compatible.</p>
+                                            </div>
+                                        </div>
+                                    </div> --}}
+                                </div>
+                            </div>
+                            <div class="chat-app-form">
+                                <form id="form_send_message" class="chat-app-input d-flex">
+                                    <input id="customerId" type="hidden" name="customer_id">
+                                    <input type="text" name="message" class="form-control" placeholder="Tulis pesan di sini">
+                                    <button id="buttonSubmit" type="submit" class="btn btn-primary send"><i class="fa fa-paper-plane-o d-lg-none"></i> <span class="d-none d-lg-block">Kirim</span></button>
+                                </form>
+                            </div>
                         </div>
                     </section>
-
                 </div>
             </div>
         </div>
@@ -94,7 +128,7 @@
                                 '</div>'+
                             '</li>';
                     }
-                    $('#record').append(html);
+                    $('#record').html(html);
                 }
             });
         }
@@ -130,58 +164,6 @@
                 }
             })
             return false;
-        });
-        // detail
-        $('#datatable').on('click', '.edit-button', function() {
-            var id = $(this).data('id');
-            $.ajax({
-                type: "POST",
-                url: "{{ route('saving.edit') }}",
-                data: {
-                    id: id
-                },
-                success: function(row) {
-                    $('#modal_form_edit').modal('show');
-                    $('#edit_id').val(row.data.id);
-                    $('#edit_customer_id').val(row.data.customer_id).prop('selected', true).trigger('change');
-                    $('#edit_trash_id').val(row.data.trash_id).prop('selected', true).trigger('change');
-                    $('#edit_weight').val(row.data.weight);
-                    $('#edit_description').val(row.data.description);
-
-                    $('#form_edit').off('submit');
-                    $('#form_edit').on('submit', function() {
-                        $.ajax({
-                            type: "POST",
-                            url: "{{ route('saving.update') }}",
-                            data: new FormData($('#form_edit')[0]),
-                            processData: false,
-                            contentType: false,
-                            dataType: "JSON",
-                            success: function(row) {
-                                $('#datatable').DataTable().ajax.reload();
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top-end',
-                                    showConfirmButton: false,
-                                    timer: 3000,
-                                    timerProgressBar: true,
-                                    onOpen: (toast) => {
-                                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                    }
-                                })
-                                Toast.fire({
-                                    type: 'success',
-                                    title: 'Menyunting {{ strtolower($title) }}'
-                                })
-                                $('#modal_form_edit').modal('hide');
-                                $("#form_edit")[0].reset();
-                            }
-                        })
-                        return false;
-                    });
-                }
-            });
         });
         // delete
         $('#datatable').on('click', '.delete-button', function() {
@@ -264,8 +246,44 @@
             }, 1500);
         });
 
-        // detail
-        $('#record').on('click', '.message-list', function() {
+        // message detail
+        loadDetail();
+        function loadDetail() {
+            var valueCustomerId = $('#customerId').val()
+            $.ajax({
+                url: "{{ route('message.detail') }}",
+                type: "POST",
+                data: {
+                    customer_id: valueCustomerId
+                },
+                success: function(row) {
+                    //$('#datatable').DataTable().ajax.reload();
+                    $('#customerId').val(row.data.customer_id);
+                    $('#customerNameMessage').text(row.data.customer_name);
+                    var html = '';
+                    var j;
+                    for(j=0; j<row.data.content.length; j++){
+                        var ownMessage = '';
+                        if(row.data.content[j].sender == "customer"){
+                            ownMessage = "chat-left";
+                        }
+                        html += '<div class="chat '+ownMessage+'">'+
+                                    '<div class="chat-body">'+
+                                        '<div class="chat-content">'+
+                                            '<p>'+row.data.content[j].message+'</p>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>';
+
+                    }
+                    $('#messageContent').html(html);
+                }
+            });
+        }
+
+        // list click
+        $('#record').on('click', '.message-list','#buttonSubmit', function(e) {
+            e.preventDefault();
             var id = $(this).data('id');
             $.ajax({
                 url: "{{ route('message.detail') }}",
@@ -273,55 +291,47 @@
                 data: {
                     customer_id: id
                 },
-                success: function(data) {
+                success: function(row) {
                     //$('#datatable').DataTable().ajax.reload();
-                    var htmlx = '';
-                    var i;
-                    for(i=0; i<row.data.length; i++){
-                        htmlx += '<div>'+
-                                '<div class="chat_navbar">'+
-                                    '<header class="chat_header d-flex justify-content-between align-items-center p-1">'+
-                                        '<div class="vs-con-items d-flex align-items-center">'+
-                                            '<div class="sidebar-toggle d-block d-lg-none mr-1"><i class="feather icon-menu font-large-1"></i></div>'+
-                                            '<div class="avatar user-profile-toggle m-0 m-0 mr-1">'+
-                                                '<img src="{{ asset("") }}images/portrait/small/avatar-s-1.jpg" alt="" height="40" width="40" />'+
-                                                '<span class="avatar-status-busy"></span>'+
-                                            '</div>'+
-                                            '<h6 class="mb-0"></h6>'+
-                                        '</div>'+
-                                        '<span class="favorite"><i class="feather icon-star font-medium-5"></i></span>'+
-                                    '</header>'+
-                                '</div>'+
-                                '<div class="user-chats">'+
-                                    '<div class="chats">'+
-                                        '<div class="chat chat-left">'+
-                                            '<div class="chat-avatar">'+
-                                                '<a class="avatar m-0" data-toggle="tooltip" href="#" data-placement="left" title="" data-original-title="">'+
-                                                    '<img src="{{ asset("") }}images/portrait/small/avatar-s-7.jpg" alt="avatar" height="40" width="40" />'+
-                                                '</a>'+
-                                            '</div>'+
-                                            '<div class="chat-body">'+
-                                                '<div class="chat-content">'+
-                                                    '<p>I will purchase it for sure.</p>'+
-                                                '</div>'+
-                                                '<div class="chat-content">'+
-                                                    '<p>Thanks.</p>'+
-                                                '</div>'+
-                                            '</div>'+
-                                        '</div>'+
-                                    '</div>'+
-                                '</div>'+
-                                '<div class="chat-app-form">'+
-                                    '<form class="chat-app-input d-flex" onsubmit="enter_chat();" action="javascript:void(0);">'+
-                                        '<input type="text" class="form-control message mr-1 ml-50" id="iconLeft4-1" placeholder="Type your message">'+
-                                        '<button type="button" class="btn btn-primary send" onclick="enter_chat();"><i class="fa fa-paper-plane-o d-lg-none"></i> <span class="d-none d-lg-block">Send</span></button>'+
-                                    '</form>'+
-                                '</div>'+
-                            '</div>';
-                    }
-                    $('#detailMessage').append(htmlx);
+                    $('#customerId').val(row.data.customer_id);
+                    $('#customerNameMessage').text(row.data.customer_name);
+                    loadDetail();
+                    // var html = '';
+                    // var j;
+                    // for(j=0; j<row.data.content.length; j++){
+                    //     var ownMessage = '';
+                    //     if(row.data.content[j].sender == "customer"){
+                    //         ownMessage = "chat-left";
+                    //     }
+                    //     html += '<div class="chat '+ownMessage+'">'+
+                    //                 '<div class="chat-body">'+
+                    //                     '<div class="chat-content">'+
+                    //                         '<p>'+row.data.content[j].message+'</p>'+
+                    //                     '</div>'+
+                    //                 '</div>'+
+                    //             '</div>';
+
+                    // }
+                    // $('#messageContent').html(html);
                 }
             });
+        });
+
+        $('#form_send_message').off('submit');
+        $('#form_send_message').on('submit', function() {
+            $.ajax({
+                type: "POST",
+                url: "{{ route('message.store') }}",
+                data: new FormData($('#form_send_message')[0]),
+                processData: false,
+                contentType: false,
+                dataType: "JSON",
+                success: function(data) {
+                    $("#form_send_message")[0].reset();
+                    loadDetail();
+                }
+            })
+            return false;
         });
 
     });

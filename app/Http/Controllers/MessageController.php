@@ -61,9 +61,16 @@ class MessageController extends Controller
 
     protected function store(Request $request)
     {
+        if(Auth::guard('employee')->check()) {
+            $bank_id = Auth::guard('employee')->user()->bank_id;
+        } else {
+            $bank_id = 0;
+        }
+
         $record = [
-            'bank_id' => $request['bank_id'],
+            'bank_id' => $bank_id,
             'customer_id' => $request['customer_id'],
+            'sender' => 'bank',
             'message' => $request['message'],
         ];
         $insert = Message::create($record);

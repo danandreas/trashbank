@@ -11,6 +11,7 @@ class Customer extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected $guard = 'customers';
     protected $table = 'customers';
 
     protected $fillable = [
@@ -24,6 +25,10 @@ class Customer extends Authenticatable
         'email',
         'password',
         'status',
+    ];
+
+    protected $hidden = [
+        'password',
     ];
 
     public function bank(){

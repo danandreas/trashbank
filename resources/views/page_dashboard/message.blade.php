@@ -277,6 +277,9 @@
 
                     }
                     $('#messageContent').html(html);
+                    $('.user-chats').animate({
+                        scrollTop: $('.user-chats').get(0).scrollHeight
+                    }, 1500);
                 }
             });
         }
@@ -296,23 +299,6 @@
                     $('#customerId').val(row.data.customer_id);
                     $('#customerNameMessage').text(row.data.customer_name);
                     loadDetail();
-                    // var html = '';
-                    // var j;
-                    // for(j=0; j<row.data.content.length; j++){
-                    //     var ownMessage = '';
-                    //     if(row.data.content[j].sender == "customer"){
-                    //         ownMessage = "chat-left";
-                    //     }
-                    //     html += '<div class="chat '+ownMessage+'">'+
-                    //                 '<div class="chat-body">'+
-                    //                     '<div class="chat-content">'+
-                    //                         '<p>'+row.data.content[j].message+'</p>'+
-                    //                     '</div>'+
-                    //                 '</div>'+
-                    //             '</div>';
-
-                    // }
-                    // $('#messageContent').html(html);
                 }
             });
         });

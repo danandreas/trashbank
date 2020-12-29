@@ -72,7 +72,7 @@
                                 $name = Auth::guard('admin')->user()->name;
                                 $level = "Admin";
                                 $email = Auth::guard('admin')->user()->email;
-                                $bank = Auth::guard('admin')->user()->bank->name;
+                                $bank = "Pengolah Data Master";
                             } elseif(Auth::guard('employee')->check()) {
                                 $name = Auth::guard('employee')->user()->name;
                                 $level = "Pengurus";

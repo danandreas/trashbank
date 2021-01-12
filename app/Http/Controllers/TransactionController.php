@@ -62,8 +62,8 @@ class TransactionController extends Controller
         $newTransactionId = $insert->id;
 
         /* Insert Transaction Detail */
-        $saving = Saving::where('transaction_status','0')->where('bank_id',$bank_id)->get();
-        foreach ($saving as $d) {
+        $savingSelection = Saving::where('transaction_status','0')->where('bank_id',$bank_id)->get();
+        foreach ($savingSelection as $d) {
             $addSaldo = $d->weight * $request['price_per_weight'];
             $recordDetail = [
                 'transaction_id' => $newTransactionId,
@@ -72,10 +72,16 @@ class TransactionController extends Controller
             ];
             $insertDetail = TransactionDetail::create($recordDetail);
 
-            /* Update Field Saldo */
-            $customer = Customer::where('customer_id', $d->customer_id);
+            /* Update Field Saldo at Customer */
+            $customer = Customer::where('id', $d->customer_id);
             $customer->update([
                 'saldo' => $addSaldo
+            ]);
+
+            /* Update Field 'transaction_status' at Saving */
+            $saving = Saving::where('id', $d->id);
+            $saving->update([
+                'transaction_status' => '1'
             ]);
         }
 
@@ -106,7 +112,7 @@ class TransactionController extends Controller
     public function update(Request $request)
     {
         if($request->has('id')){
-            $record = Saving::find($request->input('id'));
+            $record = Transaction::find($request->input('id'));
             $record->update([
                 'name' => $request['name'],
                 'description' => $request['description'],

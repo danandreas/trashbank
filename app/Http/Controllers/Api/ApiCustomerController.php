@@ -55,14 +55,14 @@ class ApiCustomerController extends Controller
 
     protected function login(Request $request)
     {
-        $this->validate($request, [
-            'email'   => 'required|email',
-            'password' => 'required|min:3'
-        ]);
+        //$this->validate($request, [
+            //'email'   => 'required',
+            //'password' => 'required'
+        //]);
 
         if (Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
             // Update Device Token
-            $record = Customer::find($request['email']);
+            $record = Customer::where('email', $request['email']);
             $record->update([
                 'device_token' => $request['device_token']
             ]);

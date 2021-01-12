@@ -27,4 +27,8 @@ class Bank extends Model
     public function message(){
     	return $this->hasMany(Message::class);
     }
+
+    public function transaction(){
+    	return $this->hasMany(Transaction::class);
+    }
 }

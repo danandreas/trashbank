@@ -2,25 +2,19 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Bank;
 use App\Models\Saving;
+use App\Models\Transaction;
+use App\Models\TransactionDetail;
 use App\Models\Customer;
-use App\Models\Trash;
 use Illuminate\Http\Request;
 
-class SavingController extends Controller
+class TransactionController extends Controller
 {
     public function index()
     {
-        if(Auth::guard('employee')->check()) {
-            $bank_id = Auth::guard('employee')->user()->bank_id;
-        } else {
-            $bank_id = 0;
-        }
-
-        $data['title'] = "Tabungan";
-        $data['customer'] = Customer::where('bank_id',$bank_id)->orderBy('name', 'asc')->get();
-        $data['trash'] = Trash::orderBy('name', 'asc')->get();
-        return view('page_dashboard.saving', $data);
+        $data['title'] = "Transaksi";
+        return view('page_dashboard.transaction', $data);
     }
 
     public function data()
@@ -32,19 +26,16 @@ class SavingController extends Controller
             $bank_id = 0;
         }
 
-        $query = Saving::where('bank_id',$bank_id)->where('transaction_status','0')->orderBy('id', 'desc')->get();
+        $query = Transaction::where('bank_id',$bank_id)->orderBy('id', 'desc')->get();
         $record = [];
         foreach($query as $i => $d){
             $record[$i] = [];
             $record[$i]['id'] = $d->id;
             $record[$i]['created_at'] = myDate($d->created_at);
-            $record[$i]['account_number'] = $d->customer->account_number;
-            $record[$i]['customer_name'] = $d->customer->name;
             $record[$i]['bank_name'] = $d->bank->name;
-            $record[$i]['trash_name'] = $d->trash->name;
-            $record[$i]['weight'] = $d->weight;
+            $record[$i]['name'] = $d->name;
             $record[$i]['description'] = $d->description;
-            $record[$i]['transaction_status'] = $d->transaction_status;
+            $record[$i]['price_per_weight'] = myCurrency($d->price_per_weight);
         }
         return response()->json([
             'code' => '200',
@@ -60,24 +51,42 @@ class SavingController extends Controller
             $bank_id = 0;
         }
 
+        /* Insert Transaction */
         $record = [
-            'customer_id' => $request['customer_id'],
             'bank_id' => $bank_id,
-            'trash_id' => $request['trash_id'],
-            'weight' => str_replace(',', '.', $request['weight']),
+            'name' => $request['name'],
             'description' => $request['description'],
-            'transaction_status' => "0",
+            'price_per_weight' => $request['price_per_weight'],
         ];
-        $insert = Saving::create($record);
+        $insert = Transaction::create($record);
+        $newTransactionId = $insert->id;
 
-        if ($insert == TRUE) {
+        /* Insert Transaction Detail */
+        $saving = Saving::where('transaction_status','0')->where('bank_id',$bank_id)->get();
+        foreach ($saving as $d) {
+            $addSaldo = $d->weight * $request['price_per_weight'];
+            $recordDetail = [
+                'transaction_id' => $newTransactionId,
+                'saving_id' => $d->id,
+                'income' => $addSaldo,
+            ];
+            $insertDetail = TransactionDetail::create($recordDetail);
+
+            /* Update Field Saldo */
+            $customer = Customer::where('customer_id', $d->customer_id);
+            $customer->update([
+                'saldo' => $addSaldo
+            ]);
+        }
+
+        if ($insert === TRUE && $insertDetail === TRUE) {
             return response()->json([
                 'code' => '200',
                 'data' => 'Create Success',
             ]);
         } else {
             return response()->json([
-                'code' => '200',
+                'code' => '500',
                 'data' => 'Create Failed',
             ]);
         }
@@ -86,7 +95,7 @@ class SavingController extends Controller
     public function edit(Request $request)
     {
         if($request->has('id')){
-            $record = Saving::find($request->input('id'));
+            $record = Transaction::find($request->input('id'));
             return response()->json([
                 'code' => '200',
                 'data' => $record,
@@ -99,33 +108,32 @@ class SavingController extends Controller
         if($request->has('id')){
             $record = Saving::find($request->input('id'));
             $record->update([
-                'trash_id' => $request['trash_id'],
-                'weight' => str_replace(',', '.', $request['weight']),
+                'name' => $request['name'],
                 'description' => $request['description'],
             ]);
-            if ($record == TRUE) {
+            if ($record === TRUE) {
                 return response()->json([
                     'code' => '200',
                     'data' => 'Update Success',
                 ]);
             } else {
                 return response()->json([
-                    'code' => '200',
+                    'code' => '500',
                     'data' => 'Update Failed',
                 ]);
             }
         }
     }
 
-    public function delete(Request $request)
-    {
-        if($request->has('id')){
-            $record = Saving::where('id',$request->input('id'));
-            $record->delete();
-            return response()->json([
-                'code' => '200',
-                'data' => 'Delete Success',
-            ]);
-        }
-    }
+    // public function delete(Request $request)
+    // {
+    //     if($request->has('id')){
+    //         $record = Saving::where('id',$request->input('id'));
+    //         $record->delete();
+    //         return response()->json([
+    //             'code' => '200',
+    //             'data' => 'Delete Success',
+    //         ]);
+    //     }
+    // }
 }

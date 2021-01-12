@@ -7,31 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Saving extends Authenticatable
+class Transaction extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'savings';
+    protected $table = 'transactions';
 
     protected $fillable = [
-        'customer_id',
         'bank_id',
-        'trash_id',
-        'weight',
+        'name',
         'description',
-        'transaction_status',
+        'price_per_weight',
     ];
 
     public function bank(){
     	return $this->belongsTo(Bank::class);
-    }
-
-    public function trash(){
-    	return $this->belongsTo(Trash::class);
-    }
-
-    public function customer(){
-    	return $this->belongsTo(Customer::class);
     }
 
     public function transaction_detail(){

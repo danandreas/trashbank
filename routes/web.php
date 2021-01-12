@@ -7,6 +7,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TrashController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\SavingController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 
@@ -112,6 +113,17 @@ Route::group(['prefix' => 'saving', 'middleware' => ['auth:employee'], 'except'=
 });
 
 Route::get('fcm','App\Http\Controllers\FcmController@index');
+
+# Transaction
+Route::group(['prefix' => 'transaction', 'middleware' => ['auth:employee'], 'except'=>['employee.logout']], function(){
+    Route::get('/',[TransactionController::class,'index'])->name('transaction.index');
+    Route::get('data',[TransactionController::class,'data'])->name('transaction.data');
+    Route::post('store',[TransactionController::class,'store'])->name('transaction.store');
+    Route::post('edit',[TransactionController::class,'edit'])->name('transaction.edit');
+    Route::post('detail',[TransactionController::class,'detail'])->name('transaction.detail');
+    Route::post('update',[TransactionController::class,'update'])->name('transaction.update');
+    Route::post('delete',[TransactionController::class,'delete'])->name('transaction.delete');
+});
 
 # Message
 Route::group(['prefix' => 'message', 'middleware' => ['auth:employee'], 'except'=>['employee.logout']], function(){

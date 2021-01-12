@@ -32,3 +32,9 @@ function mySwitchButton($status, $data_id, $class)
 
 	return $text;
 }
+
+function myCurrency($x)
+{
+	$text = "Rp " . number_format($x, 0, ',', '.');
+	return $text;
+}

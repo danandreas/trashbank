@@ -24,6 +24,7 @@ class Customer extends Authenticatable
         'saldo',
         'email',
         'password',
+		'device_token',
         'status',
     ];
 

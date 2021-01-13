@@ -138,43 +138,44 @@
         <div class="shadow-bottom"></div>
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                @php
-                if(Auth::guard('admin')->check()) {
-                @endphp
-                    <li class=" navigation-header"><span>Master</span>
+                
+                @if(Auth::guard('admin')->check())
+                    <li class="navigation-header"><span>Master</span>
                     </li>
-                    <li class=" nav-item">
+                    <li class="nav-item">
                         <a href="{{ route('admin.index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="Admin">Admin</span></a>
                     </li>
-                    <li class=" nav-item">
+                    <li class="nav-item">
                         <a href="{{ route('trash.index') }}"><i class="feather icon-trash"></i><span class="menu-title" data-i18n="Jenis Sampah">Jenis Sampah</span></a>
                     </li>
-                    <li class=" nav-item">
+                    <li class="nav-item">
                         <a href="{{ route('bank.index') }}"><i class="feather icon-map-pin"></i><span class="menu-title" data-i18n="Bank">Bank</span></a>
                     </li>
-                    <li class=" nav-item">
+                    <li class="nav-item">
                         <a href="{{ route('employee.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Pengurus">Pengurus</span></a>
                     </li>
-                @php
-                } elseif(Auth::guard('employee')->check()) {
-                @endphp
-                    <li class=" navigation-header"><span>Menu</span>
+                    <li class="nav-item">
+                        <a href=""><i class="feather icon-bar-chart"></i><span class="menu-title" data-i18n="Rekap">Rekap</span></a>
                     </li>
-                    <li class=" nav-item">
+                @elseif(Auth::guard('employee')->check())
+                    <li class="navigation-header"><span>Menu</span>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('customer.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Nasabah">Nasabah</span></a>
                     </li>
-                    <li class=" nav-item">
+                    <li class="nav-item">
                         <a href="{{ route('saving.index') }}"><i class="feather icon-layers"></i><span class="menu-title" data-i18n="Tabungan">Tabungan</span></a>
                     </li>
-                    <li class=" nav-item">
+                    <li class="nav-item">
                         <a href="{{ route('transaction.index') }}"><i class="feather icon-zap"></i><span class="menu-title" data-i18n="Transaksi">Transaksi</span></a>
                     </li>
-                    <li class=" nav-item">
+                    <li class="nav-item" hidden>
                         <a href="{{ route('message.index') }}"><i class="feather icon-mail"></i><span class="menu-title" data-i18n="Pesan">Pesan</span></a>
-                    </li>                
-                @php
-                }
-                @endphp
+                    </li>
+                    <li class="nav-item">
+                        <a href=""><i class="feather icon-bar-chart"></i><span class="menu-title" data-i18n="Rekap">Rekap</span></a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>

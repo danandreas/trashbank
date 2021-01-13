@@ -109,6 +109,32 @@ class TransactionController extends Controller
         }
     }
 
+    public function detail($id)
+    {
+        $data['title'] = "Transaksi";
+        $data['parameterId'] = $id;
+        return view('page_dashboard.transaction_detail', $data);
+    }
+
+    public function detail_data($id)
+    {
+        $query = TransactionDetail::where('transaction_id',$id)->orderBy('id', 'desc')->get();
+        $record = [];
+        foreach($query as $i => $d){
+            $customerId = Saving::where('id', $d->saving_id)->first()->customer_id;
+            $customer = Customer::where('id',$customerId)->first();
+            $record[$i]['id'] = $d->id;
+            $record[$i]['created_at'] = myDate($d->created_at);
+            $record[$i]['account_number'] = $customer->account_number;
+            $record[$i]['customer_name'] = $customer->name;
+            $record[$i]['income'] = myCurrency($d->income);
+        }
+        return response()->json([
+            'code' => '200',
+            'data' => $record,
+        ]);
+    }
+
     public function update(Request $request)
     {
         if($request->has('id')){

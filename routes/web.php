@@ -120,7 +120,8 @@ Route::group(['prefix' => 'transaction', 'middleware' => ['auth:employee'], 'exc
     Route::get('data',[TransactionController::class,'data'])->name('transaction.data');
     Route::post('store',[TransactionController::class,'store'])->name('transaction.store');
     Route::post('edit',[TransactionController::class,'edit'])->name('transaction.edit');
-    Route::post('detail',[TransactionController::class,'detail'])->name('transaction.detail');
+    Route::get('detail/{id}',[TransactionController::class,'detail'])->name('transaction.detail');
+    Route::get('detail-data/{id}',[TransactionController::class,'detail_data'])->name('transaction.detail_data');
     Route::post('update',[TransactionController::class,'update'])->name('transaction.update');
     Route::post('delete',[TransactionController::class,'delete'])->name('transaction.delete');
 });

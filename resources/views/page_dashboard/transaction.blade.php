@@ -159,7 +159,11 @@
                 { data: 'description' },
                 { data: null, 'sortable': false,
                     render: function ( data, type, row ) {
+                        var id = data.id;
+                        var url_to_detail = '{{ route("transaction.detail",":id") }}';
+                        url_to_detail = url_to_detail.replace(':id', id );
                         return '<button type="button" data-id="'+data.id+'" class="edit-button btn btn-icon btn-icon rounded-circle btn-primary btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-edit-1"></i></button>'+
+                        '<a href="'+url_to_detail+'" class="btn btn-icon btn-icon rounded-circle btn-success btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-zoom-in"></i></a>'+
                         '<button type="button" data-id="'+data.id+'" class="delete-button btn btn-icon btn-icon rounded-circle btn-danger btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-trash"></i></button>';
                     }
                 }

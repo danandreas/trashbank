@@ -120,7 +120,7 @@
         <div class="navbar-header">
             <ul class="nav navbar-nav flex-row">
                 <li class="nav-item mr-auto">
-                    <a class="navbar-brand" href="../../../html/ltr/vertical-collapsed-menu-template/index.html">
+                    <a class="navbar-brand" href="">
                         <img src="{{ asset('/images/logo/logo.png') }}" width="40px">
                         <h6 class="brand-text mb-0">Bank Sampah</h6>
                     </a>

@@ -19,7 +19,7 @@ class SavingController extends Controller
 
         $data['title'] = "Tabungan";
         $data['customer'] = Customer::where('bank_id',$bank_id)->orderBy('name', 'asc')->get();
-        $data['trash'] = Trash::orderBy('name', 'asc')->get();
+        $data['trash'] = Trash::orderBy('id', 'desc')->get();
         return view('page_dashboard.saving', $data);
     }
 
@@ -35,14 +35,20 @@ class SavingController extends Controller
         $query = Saving::where('bank_id',$bank_id)->where('transaction_status','0')->orderBy('id', 'desc')->get();
         $record = [];
         foreach($query as $i => $d){
-            $record[$i] = [];
             $record[$i]['id'] = $d->id;
             $record[$i]['created_at'] = myDate($d->created_at);
             $record[$i]['account_number'] = $d->customer->account_number;
             $record[$i]['customer_name'] = $d->customer->name;
             $record[$i]['bank_name'] = $d->bank->name;
             $record[$i]['trash_name'] = $d->trash->name;
+            $record[$i]['trash_detail'] = $d->trash_detail;
             $record[$i]['weight'] = $d->weight;
+            $record[$i]['buying_price'] = $d->buying_price;
+            $record[$i]['selling_price'] = $d->selling_price;
+            $record[$i]['bank_total_price'] = $d->bank_total_price;
+            $record[$i]['customer_total_price'] = $d->customer_total_price;
+            $record[$i]['profit'] = $d->profit;
+            $record[$i]['payment_method'] = myPaymentMethod($d->payment_method);
             $record[$i]['description'] = $d->description;
             $record[$i]['transaction_status'] = $d->transaction_status;
         }
@@ -60,24 +66,51 @@ class SavingController extends Controller
             $bank_id = 0;
         }
 
+        /* ------- Calculation Price ------- */
+        $weight = $request['weight'];
+        $buying_price = $request['buying_price'];
+        $selling_price = $request['selling_price'];
+        $bank_total_price = $weight * $buying_price;
+        $customer_total_price = $weight * $selling_price;
+        $profit = $customer_total_price - $bank_total_price;
+
         $record = [
             'customer_id' => $request['customer_id'],
             'bank_id' => $bank_id,
             'trash_id' => $request['trash_id'],
-            'weight' => str_replace(',', '.', $request['weight']),
+            'trash_detail' => $request['trash_detail'],
+            'weight' => str_replace(',', '.', $weight),
+            'buying_price' => $buying_price,
+            'selling_price' => $selling_price,
+            'bank_total_price' => $bank_total_price,
+            'customer_total_price' => $customer_total_price,
+            'profit' => $profit,
+            'payment_method' => $request['payment_method'],
             'description' => $request['description'],
             'transaction_status' => "0",
         ];
         $insert = Saving::create($record);
 
-        if ($insert == TRUE) {
+        /* ------- Payment Method == Ditabung ------- */
+        $pm = $request['payment_method'];
+        if ($pm == 2) {
+            /* Update Field Saldo at Customer */
+            $currentSaldo = Customer::where('id',$request['customer_id'])->first()->saldo;
+            $newSaldo = $currentSaldo + $customer_total_price;        
+            $customer = Customer::where('id', $request['customer_id']);
+            $customer->update([
+                'saldo' => $newSaldo
+            ]);
+        }        
+
+        if ($insert === TRUE) {
             return response()->json([
                 'code' => '200',
                 'data' => 'Create Success',
             ]);
         } else {
             return response()->json([
-                'code' => '200',
+                'code' => '500',
                 'data' => 'Create Failed',
             ]);
         }
@@ -100,6 +133,7 @@ class SavingController extends Controller
             $record = Saving::find($request->input('id'));
             $record->update([
                 'trash_id' => $request['trash_id'],
+                'trash_detail' => $request['trash_detail'],
                 'weight' => str_replace(',', '.', $request['weight']),
                 'description' => $request['description'],
             ]);

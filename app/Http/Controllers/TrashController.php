@@ -14,7 +14,7 @@ class TrashController extends Controller
 
     public function data()
     {
-        $record =  Trash::all();
+        $record =  Trash::orderBy('id', 'desc')->get();
         return response()->json([
             'code' => '200',
             'data' => $record,

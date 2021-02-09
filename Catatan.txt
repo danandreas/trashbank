@@ -1,0 +1,17 @@
+#Input Tabungan
+
+1. pembayaran [bayar langsung, ditabung, barter]
+
+#Input Transaksi
+1. Laba
+2. nama Transaksi ditambahi "Transaksi/Mbudalke"
+
+#Jenis Sampah
+1. Lain-lain diisi.
+
+Plastik, Kertas, Logam, Kaca, Lain-lain
+=> dibuat keterangan
+
+[Kg, Satuan]
+Harga Beli = Setoran Nasabah
+Harga Jual = Penjualan ke Pihak lain

@@ -12,7 +12,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Input {{ $title }}</h4>
+                                <h4 class="card-title">{{ $title }}</h4>
                             </div>
                             <div class="card-content">
                                 <div class="card-body card-dashboard">
@@ -29,7 +29,14 @@
                                                     <th width="40px">No. Akun</th>
                                                     <th>Nasabah</th>
                                                     <th>Jenis Sampah</th>
+                                                    <th>Detail Sampah</th>
                                                     <th width="30px">Berat</th>
+                                                    <th>Harga Beli/kg</th>
+                                                    <th>Harga Jual/kg</th>
+                                                    <th>Harga Total Bank</th>
+                                                    <th>Harga Total Nasabah</th>
+                                                    <th>Laba</th>
+                                                    <th>Metode Pembayaran</th>
                                                     <th>Keterangan</th>
                                                     <th width="100px">Pilihan</th>
                                                 </tr>
@@ -78,7 +85,7 @@
                         <label>Jenis Sampah*</label>
                         <div class="controls">
                             <div class="form-group">
-                                <select id="" name="trash_id" class="select2 form-control" style="width:100%" required>
+                                <select id="trash_id" name="trash_id" class="select2 form-control" style="width:100%" required>
                                     <option value="">Pilih Jenis Sampah</option>
                                     @foreach ($trash as $t)
                                         <option value="{{ $t->id }}">{{ $t->name }}</option>
@@ -87,18 +94,67 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Berat*</label>
+                    <div class="form-group" id="div_trash_detail">
+                        <label>Detail Jenis Sampah</label>
                         <div class="controls">
-                            <input id="" name="weight" type="text" class="form-control" autocomplete="off" maxlength="10" required>
+                            <input id="trash_detail" name="trash_detail" type="text" class="form-control" autocomplete="off" maxlength="255">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label>Berat (Kg)*</label>
+                        <div class="controls">
+                            <input id="weight" name="weight" type="text" class="form-control" autocomplete="off" maxlength="10" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Metode Pembayaran</label>
+                        <div class="controls">
+                            <div class="form-group">
+                                <select id="payment_method" name="payment_method" class="select2 form-control" style="width:100%" required>
+                                    <option value="">Pilih Metode Pembayaran</option>
+                                    <option value="1">{{ myPaymentMethod(1) }}</option>
+                                    <option value="2">{{ myPaymentMethod(2) }}</option>
+                                    <option value="3">{{ myPaymentMethod(3) }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">                        
+                        <label>Harga Beli/Kg*</label>
+                        <div class="controls">
+                            <input id="buying_price" name="buying_price" type="text" class="form-control" autocomplete="off" maxlength="10" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Harga Jual/Kg*</label>
+                        <div class="controls">
+                            <input id="selling_price" name="selling_price" type="text" class="form-control" autocomplete="off" maxlength="10" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <table class="table mb-2">
+                            <tbody>
+                                <tr class="table-info">
+                                    <td>Total Harga untuk Bank</td>
+                                    <td class="text-right"><p id="bank_total_price"></p></td>
+                                </tr>
+                                <tr class="table-warning">
+                                    <td>Total Harga untuk Nasabah</td>
+                                    <td class="text-right"><p id="customer_total_price"></p></td>
+                                </tr>
+                                <tr class="table-success">
+                                    <td>Laba</td>
+                                    <td class="text-right"><p id="profit"></p></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>    
                     <div class="form-group">
                         <label>Keterangan</label>
                         <div class="controls">
                             <textarea name="description" class="form-control"></textarea>
                         </div>
-                    </div>
+                    </div>    
                     <div class="form-group">
                         <label style="color: #ea5455">*) Wajib diisi</label>
                     </div><br>
@@ -111,6 +167,29 @@
         </div>
     </div>
 </div>
+
+<script>
+    /* Price Calculation */
+    $(document).on("change keyup blur", "#weight,#buying_price,#selling_price", function() {
+        var weight = $('#weight').val();
+        var buying_price = $('#buying_price').val();
+        var selling_price = $('#selling_price').val();
+        
+        var bank_total_price = weight * buying_price;
+        var customer_total_price = weight * selling_price;
+        var profit = customer_total_price - bank_total_price;
+
+        $('#bank_total_price').text(bank_total_price);
+        $('#customer_total_price').text(customer_total_price);
+        $('#profit').text(profit);
+    });
+    /* Payment Method on Change */
+    $('#payment_method').change(function() {
+            if (this.value == 3){ // 3 = Barter
+                $("#selling_price").val(0);
+            }
+        });
+</script>
 
 <!-- Modal Edit -->
 <div class="modal fade text-left" id="modal_form_edit" tabindex="-1" role="dialog" aria-hidden="true">
@@ -151,6 +230,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group" id="div_edit_trash_detail">
+                        <label>Detail Jenis Sampah</label>
+                        <div class="controls">
+                            <input id="edit_trash_detail" name="trash_detail" type="text" class="form-control" autocomplete="off" maxlength="255">
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label>Berat*</label>
                         <div class="controls">
@@ -175,6 +260,34 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Show - Hide
+    $(document).ready(function() {
+        // Input
+        document.getElementById('div_trash_detail').style.display = 'none';
+        $("#trash_detail").attr("disabled", true);
+        $('#trash_id').change(function() {
+            if (this.value == 0){
+                document.getElementById('div_trash_detail').style.display = 'block';
+                $("#trash_detail").attr("disabled", false);
+            } else {
+                document.getElementById('div_trash_detail').style.display = 'none';
+                $("#trash_detail").attr("disabled", true);
+            }
+        });
+        // Edit
+        $('#edit_trash_id').change(function() {
+            if (this.value == 0){
+                document.getElementById('div_edit_trash_detail').style.display = 'block';
+                $("#edit_trash_detail").attr("disabled", false);
+            } else {
+                document.getElementById('div_edit_trash_detail').style.display = 'none';
+                $("#edit_trash_detail").attr("disabled", true);
+            }
+        });
+    });
+</script>
 
 <!-- CRUD -->
 <script type="text/javascript">
@@ -201,11 +314,18 @@
                 { data: 'account_number' },
                 { data: 'customer_name' },
                 { data: 'trash_name' },
+                { data: 'trash_detail' },
                 { data: null, 'sortable': true,
                     render: function ( data, type, row ) {
                         return '<b> '+data.weight+' </b>';
                     }
                 },
+                { data: 'buying_price', render: $.fn.dataTable.render.number('.', ',', 0, '') },
+                { data: 'selling_price', render: $.fn.dataTable.render.number('.', ',', 0, '') },
+                { data: 'bank_total_price', render: $.fn.dataTable.render.number('.', ',', 0, '') },
+                { data: 'customer_total_price', render: $.fn.dataTable.render.number('.', ',', 0, '') },
+                { data: 'profit', render: $.fn.dataTable.render.number('.', ',', 0, '') },
+                { data: 'payment_method' },
                 { data: 'description' },
                 { data: null, 'sortable': false,
                     render: function ( data, type, row ) {
@@ -262,8 +382,19 @@
                     $('#edit_id').val(row.data.id);
                     $('#edit_customer_id').val(row.data.customer_id).prop('selected', true).trigger('change');
                     $('#edit_trash_id').val(row.data.trash_id).prop('selected', true).trigger('change');
+                    $('#edit_trash_detail').val(row.data.trash_detail);
                     $('#edit_weight').val(row.data.weight);
                     $('#edit_description').val(row.data.description);
+
+                    /* -------- Start Show-Hide -------- */
+                    if (row.data.trash_id == 0){
+                        document.getElementById('div_edit_trash_detail').style.display = 'block';
+                        $("#edit_trash_detail").attr("disabled", false);
+                    } else {
+                        document.getElementById('div_edit_trash_detail').style.display = 'none';
+                        $("#edit_trash_detail").attr("disabled", true);
+                    }
+                    /* -------- End Show-Hide -------- */
 
                     $('#form_edit').off('submit');
                     $('#form_edit').on('submit', function() {

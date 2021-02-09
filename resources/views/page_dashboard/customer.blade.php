@@ -12,7 +12,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Input {{ $title }}</h4>
+                                <h4 class="card-title">{{ $title }}</h4>
                             </div>
                             <div class="card-content">
                                 <div class="card-body card-dashboard">

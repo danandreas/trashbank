@@ -12,7 +12,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Judul</h4>
+                                <h4 class="card-title">{{ $title }}</h4>
                             </div>
                             <div class="card-content">
                                 <div class="card-body card-dashboard">
@@ -49,7 +49,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Input</h4>
+                <h4 class="modal-title">Input {{ $title }}</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -78,7 +78,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Input</h4>
+                <h4 class="modal-title">Edit {{ $title }}</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -110,32 +110,29 @@
             headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')}
         });
 
-        $('#datatable').dataTable();
-
         // read
-        loadData();
-        function loadData() {
-            $.ajax({
-                type  : 'GET',
-                url   : "{{ url('/trash/data')}}",
-                success : function(row){
-                    var html = '';
-                    var i;
-                    for(i=0; i<row.data.length; i++){
-                        html += '<tr>'+
-                                '<td>'+(i+1)+'</td>'+
-                                '<td>'+row.data[i].name+'</td>'+
-                                '<td align="center">'+
-                                    '<button type="button" data-id="'+row.data[i].id+'" class="edit-button btn btn-icon btn-icon rounded-circle btn-primary btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-edit-1"></i></button>'
-                                    +
-                                    '<button type="button" data-id="'+row.data[i].id+'" class="delete-button btn btn-icon btn-icon rounded-circle btn-danger btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-trash"></i></button>'
-                                +'</td>'+
-                                '</tr>';
+        $('#datatable').dataTable({
+            processing: true,
+            stateSave: true,
+            ajax:{
+                url: '{{ route("trash.data") }}',
+                dataSrc: 'data'
+            },
+            columns: [
+                { data: null,'sortable': true,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
                     }
-                    $('#record').html(html);
+                },
+                { data: 'name' },
+                { data: null, 'sortable': false,
+                    render: function ( data, type, row ) {
+                        return '<button type="button" data-id="'+data.id+'" class="edit-button btn btn-icon btn-icon rounded-circle btn-primary btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-edit-1"></i></button>'+
+                        '<button type="button" data-id="'+data.id+'" class="delete-button btn btn-icon btn-icon rounded-circle btn-danger btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-trash"></i></button>';
+                    }
                 }
-            });
-        };
+            ]
+        });
 
         // create
         $('#form_input').on('submit', function() {
@@ -147,6 +144,7 @@
                 contentType: false,
                 dataType: "JSON",
                 success: function(data) {
+                    $('#datatable').DataTable().ajax.reload();
                     const Toast = Swal.mixin({
                         toast: true,
                         position: 'top-end',
@@ -164,7 +162,6 @@
                     })
                     $('#modal_form_input').modal('hide');
                     $("#form_input")[0].reset();
-                    loadData();
                 }
             })
             return false;
@@ -195,6 +192,7 @@
                             contentType: false,
                             dataType: "JSON",
                             success: function(data) {
+                                $('#datatable').DataTable().ajax.reload();
                                 const Toast = Swal.mixin({
                                     toast: true,
                                     position: 'top-end',
@@ -212,7 +210,6 @@
                                 })
                                 $('#modal_form_edit').modal('hide');
                                 $("#form_edit")[0].reset();
-                                loadData();
                             }
                         })
                         return false;
@@ -242,6 +239,7 @@
                             id: id
                         },
                         success: function(data) {
+                            $('#datatable').DataTable().ajax.reload();
                             const Toast = Swal.mixin({
                                 toast: true,
                                 position: 'top-end',
@@ -257,7 +255,6 @@
                                 type: 'success',
                                 title: 'Menghapus {{ strtolower($title) }}'
                             })
-                            loadData();
                         }
                     })
                 } else if (result.dismiss === swal.DismissReason.cancel) {

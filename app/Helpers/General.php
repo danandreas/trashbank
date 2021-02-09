@@ -38,3 +38,18 @@ function myCurrency($x)
 	$text = "Rp " . number_format($x, 0, ',', '.');
 	return $text;
 }
+
+function myPaymentMethod($x)
+{
+    if ($x == "1") {
+        $text = "Dibayar Langsung";
+    } elseif ($x == "2") {
+		$text = "Ditabung";
+	} elseif ($x == "3") {
+		$text = "Barter";
+	} else {
+		$text = '-';
+	}
+
+	return $text;
+}

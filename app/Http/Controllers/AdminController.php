@@ -21,7 +21,7 @@ class AdminController extends Controller
 
     public function data()
     {
-        $record =  Admin::all();
+        $record =  Admin::orderBy('id', 'desc')->get();
         return response()->json([
             'code' => '200',
             'data' => $record,

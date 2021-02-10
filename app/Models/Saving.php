@@ -16,17 +16,15 @@ class Saving extends Authenticatable
     protected $fillable = [
         'customer_id',
         'bank_id',
+        'selling_id',
         'trash_id',
         'trash_detail',
-        'weight',
+        'quantity',
+        'unit',
         'buying_price',
         'selling_price',
-        'bank_total_price',
-        'customer_total_price',
-        'profit',
         'payment_method',
         'description',
-        'transaction_status',
     ];
 
     public function bank(){
@@ -41,7 +39,11 @@ class Saving extends Authenticatable
     	return $this->belongsTo(Customer::class);
     }
 
-    public function transaction_detail(){
-    	return $this->hasMany(TransactionDetail::class);
+    public function selling(){
+    	return $this->belongsTo(Selling::class);
     }
+
+    // public function transaction_detail(){
+    // 	return $this->hasMany(TransactionDetail::class);
+    // }
 }

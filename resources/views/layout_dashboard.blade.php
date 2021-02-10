@@ -18,6 +18,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendors/css/tables/datatable/datatables.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendors/css/extensions/sweetalert2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendors/css/forms/select/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/vendors/css/pickers/pickadate/pickadate.css') }}">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -164,10 +165,10 @@
                         <a href="{{ route('customer.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Nasabah">Nasabah</span></a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('saving.index') }}"><i class="feather icon-layers"></i><span class="menu-title" data-i18n="Tabungan">Tabungan</span></a>
+                        <a href="{{ route('selling.index') }}"><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="Penjualan">Penjualan</span></a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('transaction.index') }}"><i class="feather icon-zap"></i><span class="menu-title" data-i18n="Transaksi">Transaksi</span></a>
+                        <a href="{{ route('saving.index') }}"><i class="feather icon-layers"></i><span class="menu-title" data-i18n="Tabungan">Tabungan</span></a>
                     </li>
                     <li class="nav-item" hidden>
                         <a href="{{ route('message.index') }}"><i class="feather icon-mail"></i><span class="menu-title" data-i18n="Pesan">Pesan</span></a>
@@ -225,11 +226,23 @@
 
     <!-- BEGIN: Page JS-->
     <script src="{{ asset('/js/scripts/extensions/sweet-alerts.js') }}"></script>
+
+    <script src="{{ asset('/vendors/js/pickers/pickadate/picker.js') }}"></script>
+    <script src="{{ asset('/vendors/js/pickers/pickadate/picker.date.js') }}"></script>
+    <script src="{{ asset('/vendors/js/pickers/pickadate/picker.time.js') }}"></script>
+    <script src="{{ asset('/vendors/js/pickers/pickadate/legacy.js') }}"></script>
+    <script src="{{ asset('/js/scripts/pickers/dateTime/pick-a-datetime.js') }}"></script>
     {{-- <script src="{{ asset('/js/scripts/forms/validation/form-validation.js') }}"></script> --}}
     <!-- END: Page JS-->
     <script>
         $(document).ready(function() {
             $('.select2').select2();
+        });
+        $(function() {
+            $('.datepicker').pickadate({
+                formatSubmit: 'yyyy-mm-dd',
+                hiddenName: true
+            })    
         });
     </script>
 

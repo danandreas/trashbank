@@ -7,6 +7,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TrashController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\SavingController;
+use App\Http\Controllers\SellingController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
@@ -113,6 +114,19 @@ Route::group(['prefix' => 'saving', 'middleware' => ['auth:employee'], 'except'=
 });
 
 Route::get('fcm','App\Http\Controllers\FcmController@index');
+
+# Selling
+Route::group(['prefix' => 'selling', 'middleware' => ['auth:employee'], 'except'=>['employee.logout']], function(){
+    Route::get('/',[SellingController::class,'index'])->name('selling.index');
+    Route::get('data',[SellingController::class,'data'])->name('selling.data');
+    Route::post('store',[SellingController::class,'store'])->name('selling.store');
+    Route::post('edit',[SellingController::class,'edit'])->name('selling.edit');
+    Route::post('update',[SellingController::class,'update'])->name('selling.update');
+    Route::post('delete',[SellingController::class,'delete'])->name('selling.delete');
+    Route::post('status',[SellingController::class,'status'])->name('selling.status');
+    Route::get('detail/{id}',[SellingController::class,'detail'])->name('selling.detail');
+    Route::get('detail-data/{id}',[SellingController::class,'detail_data'])->name('selling.detail_data');
+});
 
 # Transaction
 Route::group(['prefix' => 'transaction', 'middleware' => ['auth:employee'], 'except'=>['employee.logout']], function(){

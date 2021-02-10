@@ -12,7 +12,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">{{ $title }}</h4>
+                                <h4 class="card-title">{{ $title }} (Mbudalke)</h4>
                             </div>
                             <div class="card-content">
                                 <div class="card-body card-dashboard">
@@ -25,15 +25,11 @@
                                             <thead>
                                                 <tr>
                                                     <th width="20px">No</th>
-                                                    <th width="30px">No. Akun</th>
                                                     <th>Nama</th>
-                                                    <th width="10px">JK</th>
-                                                    <th>Phone</th>
-                                                    <th>Email</th>
-                                                    <th>Alamat</th>
-                                                    <th width="40px">Tgl Registrasi</th>
-                                                    <th width="20px">Aktif</th>
-                                                    <th width="100px">Pilihan</th>
+                                                    <th>Tgl Awal</th>
+                                                    <th>Tgl Akhir</th>
+                                                    <th>Status</th>
+                                                    <th width="140px">Pilihan</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="record">
@@ -66,44 +62,19 @@
                     <div class="form-group">
                         <label>Nama*</label>
                         <div class="controls">
-                            <input id="name" name="name" type="text" class="form-control" autocomplete="off" maxlength="225" required>
+                            <input id="" name="name" type="text" class="form-control" autocomplete="off" maxlength="255" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Jenis Kelamin*</label>
+                        <label>Tanggal Awal</label>
                         <div class="controls">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="gender" value="L" checked id="L">
-                                <label class="custom-control-label" for="L">Laki-laki</label>
-                            </div>
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="gender" value="P" id="P">
-                                <label class="custom-control-label" for="P">Perempuan</label>
-                            </div>
+                            <input id="date_start" name="date_start" type="text" class="form-control datepicker" autocomplete="off" maxlength="">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Phone*</label>
+                        <label>Tanggal Akhir</label>
                         <div class="controls">
-                            <input id="phone" name="phone" type="text" class="form-control" autocomplete="off" maxlength="15" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Alamat*</label>
-                        <div class="controls">
-                            <textarea name="address" class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <div class="controls">
-                            <input id="email" name="email" type="text" class="form-control" autocomplete="off" maxlength="225">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <div class="controls">
-                            <input id="password" name="password" type="password" class="form-control" autocomplete="off" maxlength="20">
+                            <input id="date_end" name="date_end" type="text" class="form-control datepicker" autocomplete="off" maxlength="">
                         </div>
                     </div>
                     <div class="form-group">
@@ -133,46 +104,21 @@
                 <div class="modal-body">
                     <input id="edit_id" name="id" type="hidden" novalidate>
                     <div class="form-group">
-                        <label>Nama*</label>
-                        <div class="">
-                            <input id="edit_name" name="name" type="text" class="form-control" autocomplete="off" maxlength="225" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Jenis Kelamin*</label>
+                        <label>Nama Transaksi*</label>
                         <div class="controls">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="edit-radio custom-control-input" name="gender" value="L" id="EL">
-                                <label class="custom-control-label" for="EL">Laki-laki</label>
-                            </div>
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="edit-radio custom-control-input" name="gender" value="P" id="EP">
-                                <label class="custom-control-label" for="EP">Perempuan</label>
-                            </div>
+                            <input id="edit_name" name="name" type="text" class="form-control" autocomplete="off" maxlength="255" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Phone*</label>
+                        <label>Tanggal Awal</label>
                         <div class="controls">
-                            <input id="edit_phone" name="phone" type="text" class="form-control" autocomplete="off" maxlength="15" required>
+                            <input id="edit_date_start" name="date_start" type="text" class="form-control datepicker" autocomplete="off" maxlength="">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Alamat*</label>
+                        <label>Tanggal Akhir</label>
                         <div class="controls">
-                            <textarea id="edit_address" name="address" class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <div class="">
-                            <input id="edit_email" name="email" type="text" class="form-control" autocomplete="off" maxlength="225">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <div class="">
-                            <input name="password" type="password" class="form-control" autocomplete="off" maxlength="20">
+                            <input id="edit_date_end" name="date_end" type="text" class="form-control datepicker" autocomplete="off" maxlength="">
                         </div>
                     </div>
                     <div class="form-group">
@@ -200,8 +146,8 @@
             processing: true,
             stateSave: true,
             ajax:{
-                url: '{{ route("customer.data") }}',
-                dataSrc: 'data'
+                url: "{{ route('selling.data') }}",
+                dataSrc: "data"
             },
             columns: [
                 { data: null,'sortable': true,
@@ -209,13 +155,9 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                { data: 'account_number' },
                 { data: 'name' },
-                { data: 'gender' },
-                { data: 'phone' },
-                { data: 'email' },
-                { data: 'address' },
-                { data: 'created_at' },
+                { data: 'date_start' },
+                { data: 'date_end' },
                 { data: null, 'sortable': false,
                     render: function ( data, type, row ) {
                         var switchChecked = "";
@@ -227,7 +169,12 @@
                 },
                 { data: null, 'sortable': false,
                     render: function ( data, type, row ) {
+                        var id = data.id;
+                        //var url_to_detail = '{{ route("selling.detail",":id") }}';
+                        var url_to_detail = '';
+                        url_to_detail = url_to_detail.replace(':id', id );
                         return '<button type="button" data-id="'+data.id+'" class="edit-button btn btn-icon btn-icon rounded-circle btn-primary btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-edit-1"></i></button>'+
+                        '<a href="'+url_to_detail+'" class="btn btn-icon btn-icon rounded-circle btn-success btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-zoom-in"></i></a>'+
                         '<button type="button" data-id="'+data.id+'" class="delete-button btn btn-icon btn-icon rounded-circle btn-danger btn-sm mr-1 mb-1 waves-effect waves-light"><i class="feather icon-trash"></i></button>';
                     }
                 }
@@ -238,38 +185,30 @@
         $('#form_input').on('submit', function() {
             $.ajax({
                 type: "POST",
-                url: "{{ route('customer.store') }}",
+                url: "{{ route('selling.store') }}",
                 data: new FormData($('#form_input')[0]),
                 processData: false,
                 contentType: false,
                 dataType: "JSON",
                 success: function(row) {
-                    if (row.code == "302"){
-                        Swal.fire(
-                            'Gagal',
-                            'Email ini telah digunakan!',
-                            'error'
-                        );
-                    } else {
-                        $('#datatable').DataTable().ajax.reload();
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            onOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        })
-                        Toast.fire({
-                            type: 'success',
-                            title: 'Menambahkan {{ strtolower($title) }}'
-                        })
-                        $('#modal_form_input').modal('hide');
-                        $("#form_input")[0].reset();
-                    }
+                    $('#datatable').DataTable().ajax.reload();
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        onOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+                    Toast.fire({
+                        type: 'success',
+                        title: 'Menambahkan {{ strtolower($title) }}'
+                    })
+                    $('#modal_form_input').modal('hide');
+                    $("#form_input")[0].reset();
                 }
             })
             return false;
@@ -279,7 +218,7 @@
             var id = $(this).data('id');
             $.ajax({
                 type: "POST",
-                url: "{{ route('customer.edit') }}",
+                url: "{{ route('selling.edit') }}",
                 data: {
                     id: id
                 },
@@ -287,48 +226,37 @@
                     $('#modal_form_edit').modal('show');
                     $('#edit_id').val(row.data.id);
                     $('#edit_name').val(row.data.name);
-                    $('input.edit-radio:radio[name="gender"]').filter('[value='+row.data.gender+']').prop('checked', true);
-                    $('#edit_phone').val(row.data.phone);
-                    $('#edit_address').val(row.data.address);
-                    $('#edit_email').val(row.data.email);
-                    //$('#edit_bank_id').val(row.data.bank_id).prop('selected', true).trigger('change');
+                    $('#edit_date_start').val(row.data.date_start);
+                    $('#edit_date_end').val(row.data.date_end);
 
                     $('#form_edit').off('submit');
                     $('#form_edit').on('submit', function() {
                         $.ajax({
                             type: "POST",
-                            url: "{{ route('customer.update') }}",
+                            url: "{{ route('selling.update') }}",
                             data: new FormData($('#form_edit')[0]),
                             processData: false,
                             contentType: false,
                             dataType: "JSON",
                             success: function(row) {
-                                if (row.code == "302"){
-                                    Swal.fire(
-                                        'Gagal',
-                                        'Email ini telah digunakan!',
-                                        'error'
-                                    );
-                                } else {
-                                    $('#datatable').DataTable().ajax.reload();
-                                    const Toast = Swal.mixin({
-                                        toast: true,
-                                        position: 'top-end',
-                                        showConfirmButton: false,
-                                        timer: 3000,
-                                        timerProgressBar: true,
-                                        onOpen: (toast) => {
-                                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                        }
-                                    })
-                                    Toast.fire({
-                                        type: 'success',
-                                        title: 'Menyunting {{ strtolower($title) }}'
-                                    })
-                                    $('#modal_form_edit').modal('hide');
-                                    $("#form_edit")[0].reset();
-                                }
+                                $('#datatable').DataTable().ajax.reload();
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    onOpen: (toast) => {
+                                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                    }
+                                })
+                                Toast.fire({
+                                    type: 'success',
+                                    title: 'Menyunting {{ strtolower($title) }}'
+                                })
+                                $('#modal_form_edit').modal('hide');
+                                $("#form_edit")[0].reset();
                             }
                         })
                         return false;
@@ -352,7 +280,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: "{{ route('customer.delete') }}",
+                        url: "{{ route('selling.delete') }}",
                         method: "POST",
                         data: {
                             id: id
@@ -395,22 +323,21 @@
                 }
             })
         });
-
         //Status
         $('#datatable').on('click', '.switch-button', function() {
             var id = $(this).data('id');
             var status = $(this).data('status');
             if(status == "1"){
                 var change = "0";
-                var titleAlert = "Non aktif";
+                var titleAlert = "Diarsipkan";
                 var typeAlert = "error";
             } else {
                 var change = "1";
-                var titleAlert = "Aktif";
+                var titleAlert = "Sedang Berjalan";
                 var typeAlert = "success";
             }
             $.ajax({
-                url: "{{ route('customer.status') }}",
+                url: "{{ route('selling.status') }}",
                 method: "POST",
                 data: {
                     id: id,

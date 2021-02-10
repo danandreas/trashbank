@@ -1,7 +1,8 @@
 <?php
 
 function myDate($date){
-    return \Carbon\Carbon::parse($date)->format("Y-m-d");
+	
+    return !empty($date) ? \Carbon\Carbon::parse($date)->format("Y-m-d") : '';
 }
 
 function myDateTime($date){
@@ -50,6 +51,17 @@ function myPaymentMethod($x)
 	} else {
 		$text = '-';
 	}
+	return $text;
+}
 
+function myUnit($x)
+{
+    if ($x == "1") {
+        $text = "Pcs";
+    } elseif ($x == "2") {
+		$text = "Kg";
+	} else {
+		$text = '-';
+	}
 	return $text;
 }
